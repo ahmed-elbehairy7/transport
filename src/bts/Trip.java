@@ -8,7 +8,9 @@ import bts.system;
 
 public class Trip {
 
+    public static String CSVOPEN = "id,type,source,destination,stops,seats,price";
     public static String TRIPSFILE = "trips.csv";
+    public static ArrayList<Trip> trips = new ArrayList<Trip>();
 
     private String type;
     private String source;
@@ -17,11 +19,9 @@ public class Trip {
     private int seats;
     private int price;
     private int id;
+    public String driver;
 
-    public Trip() {
-    }
-
-    public Trip(int id, String type, String source, String destination, int stops, int seats, int price) {
+    public Trip(int id, String type, String source, String destination, int stops, int seats, int price, String driver) {
 
         this.id = id;
         this.type = type;
@@ -30,73 +30,75 @@ public class Trip {
         this.stops = stops;
         this.seats = seats;
         this.price = price;
+        this.driver = driver;
+
+        trips.add(this);
 
     }
 
-    public void addTrip() {
-        String tripData = this.id + "," + this.source + "," + this.destination + "," + this.stops + "," + this.seats
-                + "," + this.price;
+    public static void getTrips() {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(TRIPSFILE));
+        String line;
+        bufferedReader.readLine();
+        while ((line = bufferedReader.readLine()) != null) {
+            String[] tripData = line.split(",");
 
-        if (FIO.writeToFile(TRIPSFILE, tripData)) {
+            new Trip(Integer.parseInt(tripData[0]), tripData[1], tripData[2], tripData[3], Integer.parseInt(tripData[4]), Integer.parseInt(tripData[5]), Integer.parseInt(tripData[6]), tripData[7]);
+        }
+    } catch (FileNotFoundException e) {
+        saveTrips();
+        getTrips();
+    } catch (IOException e) {
+        System.out.println("An error occured while getting stored trips");
+        e.printStackTrace();
+    }
+        
+    }
+
+    public void addTrip(boolean saving) {
+        String tripData = toCsv();
+        FIO.writeToFile(TRIPSFILE, tripData);
+
+        if (!saving) {
             System.out.println("Trip was added succesfully");
         }
     }
+    
+    public String toCsv() {
+        return this.id + "," + this.source + "," + this.destination + "," + this.stops + "," + this.seats + "," + this.price + "," + this.driver;
+    }
+    
+    public String toString() {
+        return "==============\n" + "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
+                + this.stops + "\nSeats: " + this.seats + "\n==============\n";
+    }
 
-    public static void removetrip(int id) {
-
-        FileReader fileReader = new FileReader(TRIPSFILE);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        ArrayList<String> trips = new ArrayList<>();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            trips.add(line);
-        }
-        
-        String tripNumber;
+    public static void removeTrip(int id) {
         for (short i = 0; i < trips.size(); i++) {
-            System.out.println(trips[i]);
+            if (trips.get(i).id == id) {
+                trips.remove(i);
+                Trip.saveTrips();
+            }
         }
 
-    }   
+    }
 
-}
+    public static void listTrips() {
 
+        System.out.println("This is list of the available trips:\n\n");
 
-abstract class FakeTrip {
-
- 
-    public static void removeTrip(int FakeTripNumber, String fileName) {
-        File inputFile = new File(fileName);
-        File tempFile = new File(inputFile.getAbsolutePath() + ".tmp");
-        boolean FakeTripFound = false;
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.contains("The FakeTrip Number: " + FakeTripNumber + ",")) {
-                    FakeTripFound = true;
-                } else {
-                    writer.write(currentLine);
-                    writer.newLine();
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        if (FakeTripFound) {
-            if (!inputFile.delete()) {
-                System.out.println("Could not delete the original file.");
-                return;
-            }
-            if (!tempFile.renameTo(inputFile)) {
-                System.out.println("Could not rename the temp file.");
-            }
-        } else {
-            System.out.println("FakeTrip number " + FakeTripNumber + " not found!");
-            if (!tempFile.delete()) {
-                System.out.println("Could not delete the temp file.");
-            }
+        for (short i = 0; i < trips.size(); i++) {
+            System.out.println(trips.get(i).toString() );
         }
     }
+
+    public static void saveTrips() {
+        FIO._writeToFile(TRIPSFILE, CSVOPEN, false);
+
+        for (short i = 0; i < trips.size(); i++) {
+            trips.get(i).addTrip(true);
+        }
+    }
+
 }

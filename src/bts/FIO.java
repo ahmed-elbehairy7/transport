@@ -5,11 +5,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class FIO {
-    
+
     public static boolean writeToFile(String fileName, String data) {
+        return _writeToFile(fileName, data, true);
+    }
+    
+    public static boolean _writeToFile(String fileName, String data, boolean append) {
 
         try {
-            FileWriter fileWriter = new FileWriter(fileName, true);
+            FileWriter fileWriter = new FileWriter(fileName, append);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(data);
             bufferedWriter.newLine();

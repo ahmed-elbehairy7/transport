@@ -24,29 +24,31 @@ public class User {
     public String type;
     public boolean success = false;
     
-    public User(String type, String usersFile) {
-        USERSFILE = usersFile;
+    public User(String type) {
         this.type = type;
+        USERSFILE = this.type + "s.csv";
 
         //Initialize the scanner
         Scanner scanner = new Scanner(System.in);
 
         // Ask the user to register or login
-        System.out.print("\nWelcome!\n\nPlease enter 'l' to login, any key to register: ");
+        System.out.print("\nWelcome!\n\nPlease enter 'r' to register, any key to login: ");
 
         // Get what the user choose
         String next = scanner.nextLine();
 
         switch (next) {
-            case "l":
-                login();
+            case "r":
+                register();
                 break;
             default:
-                register();
+                login();
                 break;
         }
 
         scanner.close();
+
+        Trip.getTrips();
     }
 
     public void register() {
@@ -60,7 +62,7 @@ public class User {
 
         String userData = this.name + "," + this.Email + "," + this.username + "," + this.password;
         if (FIO.writeToFile(USERSFILE, userData)) {
-            System.out.println("your Registration successful.");
+            System.out.println("\nyour Registration successful.\n");
             this.success = true;
         }
     }
@@ -91,9 +93,8 @@ public class User {
                     this.Email = userData[1];
                     this.username = userData[2];
                     this.password = userData[3];
-                    this.type = userData[4];
                     this.success = true;
-                    System.out.println("Welcome !");
+                    System.out.println("\n\n\nWelcome " + this.type + "!\n\n");
                     return true;
                 }
             }
