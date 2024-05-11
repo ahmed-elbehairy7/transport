@@ -21,7 +21,7 @@ public class Manager extends User {
         while (true) {
 
             System.out.println(
-                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\n\n");
+                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\nAnything else to exit\n\n");
 
             switch (scanner.nextLine().toUpperCase()) {
                 case "L":
@@ -37,6 +37,7 @@ public class Manager extends User {
                 case "E":
                     editTrip(scanner);
                 default:
+                    return;
                     break;
             }
 
@@ -49,9 +50,9 @@ public class Manager extends User {
         String source = Common.getData(scanner, "Source: ");
         String Destination = Common.getData(scanner, "Destination: ");
         String Type = Common.getData(scanner, "Type: ");
-        String Stops = Common.getData(scanner, "Stops: ");
-        String Seats = Common.getData(scanner, "Seats: ");
-        String Price = Common.getData(scanner, "Price: ");
+        String Stops = Common._getData(scanner, "Stops: ", 1);
+        String Seats = Common._getData(scanner, "Seats: ", 1);
+        String Price = Common._getData(scanner, "Price: ", 1);
         String Driver = Common.getData(scanner, "Driver: ");
 
         Trip trip = new Trip(Trip.trips.getLast().id + 1, Type, source, Destination, Integer.parseInt(Stops),
@@ -65,7 +66,7 @@ public class Manager extends User {
         System.out.println("Please type the id of the trip you want to remove");
         String id = scanner.nextLine();
         if (id.isEmpty()) {
-            break;
+            return;
         }
         Trip.removeTrip(Integer.parseInt(id));
     }

@@ -1,7 +1,6 @@
-id,type,source,destination,stops,seats,price,driver
-1,type,source,destination,2,30,300,ahmed
-2,type,source,destination,2,30,300,ahmed
-3,type,source,destination,2,30,300,ahmed
-4,type,source,destination,2,30,300,ahmed
-5,type,source,destination,2,30,300,ahmed
-6,type,source,destination,2,30,300,ahmed
+id,type,source,destination,stops,seats,price
+1,source,destination,2,30,300,ahmed
+2,source,destination,2,30,300,ahmed
+4,source,destination,2,30,300,ahmed
+5,thisIsASource,destination,2,30,300,ahmed
+6,source,destination,2,30,300,ahmed

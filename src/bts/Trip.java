@@ -1,6 +1,7 @@
 package bts;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import bts.Common;
 
@@ -89,8 +90,38 @@ public class Trip {
     }
 
     public void editTrip() {
+        Scanner scanner = new Scanner(System.in);
+        String prompt = "\nNew Value: ";
         while (true) {
-            return;
+            System.out.println(
+                    "Please choose what to edit:\n\n(0) Source\n(1) Destination\n(2) Type\n(3) Stops\n(4) Seats\n(5) Price\n(6) Driver\nanything else to exit\n\n");
+
+            switch (scanner.nextLine()) {
+                case "0":
+                    this.source = Common.getData(scanner, prompt);
+                    break;
+                case "1":
+                    this.source = Common.getData(scanner, prompt);
+                    break;
+                case "2":
+                    this.source = Common.getData(scanner, prompt);
+                    break;
+                case "3":
+                    this.source = Common.getData(scanner, prompt);
+                    break;
+                case "4":
+                    this.source = Common.getData(scanner, prompt);
+                    break;
+                case "5":
+                    this.source = Common.getData(scanner, prompt);
+                    break;
+                case "6":
+                    this.source = Common.getData(scanner, prompt);
+                    break;
+                default:
+                    saveTrips();
+                    return;
+            }
         }
     }
 

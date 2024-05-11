@@ -28,12 +28,16 @@ public class Common {
 
     }
 
-    public static String getData(Scanner scanner, String prompt) {
+    public static String _getData(Scanner scanner, String prompt, int length) {
         String data;
         do {
             System.out.print(prompt);
             data = scanner.nextLine();
-        } while (data.length() < 4);
+        } while (data.length() < length);
         return data;
+    }
+
+    public static String getData(Scanner scanner, String prompt) {
+        return _getData(scanner, prompt, 4);
     }
 }
