@@ -54,6 +54,10 @@ public class UserRegistrationGUI extends JFrame {
             }
         });
     }
+
+    public boolean login(String username, String password) {
+            return false;
+    }
 }
 
 class SignInDialog extends JDialog {
@@ -86,7 +90,24 @@ class SignInDialog extends JDialog {
         String username = usernameField.getText();
         String password = passwordField.getText();
         if (authenticateUser(username, password)) {
-            JOptionPane.showMessageDialog(this, "Sign in successful!");
+            String userType = getUserType(username);
+            switch (userType) {
+                case "passenger":
+                    PassengerDialog passengerDialog = new PassengerDialog((JFrame) getParent());
+                    passengerDialog.setVisible(true);
+                    break;
+                case "driver":
+                    DriverDialog driverDialog = new DriverDialog((JFrame) getParent());
+                    driverDialog.setVisible(true);
+                    break;
+                case "manager":
+                    ManagerDialog managerDialog = new ManagerDialog((JFrame) getParent());
+                    managerDialog.setVisible(true);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Invalid user type.");
+                    break;
+            }
             setVisible(false);
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password. Please try again.");
@@ -108,16 +129,33 @@ class SignInDialog extends JDialog {
         }
         return false;
     }
+
+    private String getUserType(String username) {
+        String fileName = "users.txt";
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] userData = line.split(",");
+                if (userData.length >= 4 && userData[2].equals(username)) {
+                    return userData[4];
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 
 class SignUpDialog extends JDialog {
     private JTextField nameField, emailField, usernameField, passwordField;
+    private JRadioButton passengerButton, driverButton, managerButton;
 
     public SignUpDialog(JFrame parent) {
         super(parent, "Sign Up", true);
-        setSize(400, 200);
+        setSize(400, 250);
         setLocationRelativeTo(parent);
-        setLayout(new GridLayout(5, 2));
+        setLayout(new GridLayout(7, 2));
 
         add(new JLabel("Name:"));
         nameField = new JTextField();
@@ -135,6 +173,20 @@ class SignUpDialog extends JDialog {
         passwordField = new JPasswordField();
         add(passwordField);
 
+        add(new JLabel("Select User Type:"));
+        ButtonGroup group = new ButtonGroup();
+        passengerButton = new JRadioButton("Passenger");
+        driverButton = new JRadioButton("Driver");
+        managerButton = new JRadioButton("Manager");
+        group.add(passengerButton);
+        group.add(driverButton);
+        group.add(managerButton);
+        JPanel userTypePanel = new JPanel();
+        userTypePanel.add(passengerButton);
+        userTypePanel.add(driverButton);
+        userTypePanel.add(managerButton);
+        add(userTypePanel);
+
         JButton signUpButton = new JButton("Sign Up");
         signUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -149,18 +201,99 @@ class SignUpDialog extends JDialog {
         String email = emailField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
+        String userType = "";
+        if (passengerButton.isSelected()) {
+            userType = "passenger";
+        } else if (driverButton.isSelected()) {
+            userType = "driver";
+        } else if (managerButton.isSelected()) {
+            userType = "manager";
+        }
 
+        if (name.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty() || userType.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+            return;
+        }
+
+        String userData = name + "," + email + "," + username + "," + password + "," + userType;
         String fileName = "users.txt";
-        String userData = name + "," + email + "," + username + "," + password;
-        try (FileWriter fileWriter = new FileWriter(fileName, true);
-             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+        try {
+            FileWriter fileWriter = new FileWriter(fileName, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(userData);
             bufferedWriter.newLine();
-            JOptionPane.showMessageDialog(this, "User registered successfully!");
+            bufferedWriter.close();
+            JOptionPane.showMessageDialog(this, "Registration successful.");
             setVisible(false);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "An error occurred while writing to file.");
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "An error occurred while writing to file.");
         }
+    }
+}
+
+class PassengerDialog extends JDialog {
+    public PassengerDialog(JFrame parent) {
+        super(parent, "Passenger Dialog", true);
+        setSize(300, 150);
+        setLocationRelativeTo(parent);
+        setLayout(new BorderLayout());
+
+        JLabel label = new JLabel("Welcome, Passenger!");
+        new PassengersGUI().setVisible(true);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(label, BorderLayout.CENTER);
+
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+        add(closeButton, BorderLayout.SOUTH);
+    }
+}
+
+class DriverDialog extends JDialog {
+    public DriverDialog(JFrame parent) {
+        super(parent, "Driver Dialog", true);
+        setSize(300, 150);
+        setLocationRelativeTo(parent);
+        setLayout(new BorderLayout());
+
+        JLabel label = new JLabel("Welcome, Driver!");
+        new DriverGUI().setVisible(true);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(label, BorderLayout.CENTER);
+
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+        add(closeButton, BorderLayout.SOUTH);
+    }
+}
+
+class ManagerDialog extends JDialog {
+    public ManagerDialog(JFrame parent) {
+        super(parent, "Manager Dialog", true);
+        setSize(300, 150);
+        setLocationRelativeTo(parent);
+        setLayout(new BorderLayout());
+
+        JLabel label = new JLabel("Welcome, Manager!");
+        new ManagerGUI().setVisible(true);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(label, BorderLayout.CENTER);
+
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+        add(closeButton, BorderLayout.SOUTH);
     }
 }

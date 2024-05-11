@@ -83,7 +83,6 @@ public class User {
         String username = getData(scanner, "Enter your username: ");
         String password = getData(scanner, "Enter your password: ");
 
-        system sys = new system(username, password);
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(USERSFILE))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
