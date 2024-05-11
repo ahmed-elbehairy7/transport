@@ -1,14 +1,15 @@
-import java.awt.Color;
+package gui;
 
+import java.awt.Color;
 import javax.swing.JFrame;
 
 public class MainFrame extends JFrame {
     
-    MainFrame() {
+    public MainFrame() {
 
-        this.setTitle("Transport Company App"); //Set the title of the app
+        this.setTitle("Transport Company App");
         this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // set it to close as expected
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
 
         this.setSize(720, 720);

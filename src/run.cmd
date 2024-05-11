@@ -1,5 +1,5 @@
 @echo off
 
-javac Main.java -d ../out
+javac main/Main.java -d ../dist
 
-if not errorlevel 1 java -cp ../out Main
+if not errorlevel 1 java -cp ../dist Main

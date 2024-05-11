@@ -1,9 +1,11 @@
+package bts;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 public class Driver extends Employee {
     public Driver() {
+        super("driver", "drivers.csv");
     }
     public void Info(String userName) {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Driver.txt"))) {

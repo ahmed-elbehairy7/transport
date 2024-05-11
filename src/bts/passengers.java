@@ -1,3 +1,4 @@
+package bts;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -5,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.*;
-public class passengers extends User {
+
+public class passengers {
+    
+    public static String TRIPSFILE = "trips.csv";
+    public static String TICKETSFILE = "tickets.csv";
     public static void selectTrip() {
-        String tripsFilePath = "Trips.txt";
-        String passengerTripFilePath = "Ticket.txt";
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(tripsFilePath));
+            BufferedReader reader = new BufferedReader(new FileReader(TRIPSFILE));
             List<String> trips = new ArrayList<>();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -27,7 +30,7 @@ public class passengers extends User {
             System.out.print("For more security enter your Ticket name as you like: ");
             String name=scanner.next();
             if (choice >= 1 && choice <= trips.size()) {
-                FileWriter writer = new FileWriter(passengerTripFilePath, true); // Append mode
+                FileWriter writer = new FileWriter(TICKETSFILE, true); // Append mode
                 writer.write("The Ticket name:"+name+","+trips.get(choice - 1) + "\n");
                 writer.close();
                 System.out.println("Your trip has been recorded ");

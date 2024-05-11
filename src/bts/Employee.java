@@ -1,6 +1,8 @@
+package bts;
 import java.util.Scanner;
 public class Employee extends User {
-    public Employee() {
+    public Employee(String type, String usersFile) {
+        super(type, usersFile);
     }
     public void manageTrips() {
         Scanner scanner = new Scanner(System.in);

@@ -1,6 +1,8 @@
+package bts;
 import java.io.*;
 public class Manager extends Employee {
     public Manager() {
+        super("manager", "managers.csv");
     }
     public void assignDriverToTrip(String DriverEmail, int tripNumber) {
         String tripDetails = searchTrip(tripNumber);
