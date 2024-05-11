@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import bts.FIO;
+import bts.Common;
 
 import java.lang.System;
 import java.io.FileReader;
@@ -35,9 +35,7 @@ public class User {
         System.out.print("\nWelcome!\n\nPlease enter 'r' to register, any key to login: ");
 
         // Get what the user choose
-        String next = scanner.nextLine();
-
-        switch (next) {
+        switch (scanner.nextLine()) {
             case "r":
                 register();
                 break;
@@ -46,7 +44,9 @@ public class User {
                 break;
         }
 
-        scanner.close();
+        if (!this.success) {
+            System.exit(1);
+        }
 
         Trip.getTrips();
     }
@@ -55,33 +55,24 @@ public class User {
 
         Scanner scanner = new Scanner(System.in);
 
-        this.name = getData(scanner, "Enter your name: ");
-        this.Email = getData(scanner, "Enter your email: ");
-        this.username = getData(scanner, "Enter your username: ");
-        this.password = getData(scanner, "Enter your password: ");
+        this.name = Common.getData(scanner, "Enter your name: ");
+        this.Email = Common.getData(scanner, "Enter your email: ");
+        this.username = Common.getData(scanner, "Enter your username: ");
+        this.password = Common.getData(scanner, "Enter your password: ");
 
         String userData = this.name + "," + this.Email + "," + this.username + "," + this.password;
-        if (FIO.writeToFile(USERSFILE, userData)) {
+        if (Common.writeToFile(USERSFILE, userData)) {
             System.out.println("\nyour Registration successful.\n");
             this.success = true;
         }
     }
-    
-    private String getData(Scanner scanner, String prompt) {
-        String data;
-        do {
-            System.out.print(prompt);
-            data = scanner.nextLine();
-        } while (data.length() < 4);
-        return data;
-    }
 
     public boolean login() {
-        
+
         Scanner scanner = new Scanner(System.in);
 
-        String username = getData(scanner, "Enter your username: ");
-        String password = getData(scanner, "Enter your password: ");
+        String username = Common.getData(scanner, "Enter your username: ");
+        String password = Common.getData(scanner, "Enter your password: ");
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(USERSFILE))) {
             String line;

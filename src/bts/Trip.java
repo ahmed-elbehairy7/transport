@@ -2,9 +2,7 @@ package bts;
 import java.io.*;
 import java.util.ArrayList;
 
-import bts.FIO;
-import bts.system;
-
+import bts.Common;
 
 public class Trip {
 
@@ -12,13 +10,13 @@ public class Trip {
     public static String TRIPSFILE = "trips.csv";
     public static ArrayList<Trip> trips = new ArrayList<Trip>();
 
-    private String type;
-    private String source;
-    private String destination;
-    private int stops;
-    private int seats;
-    private int price;
-    private int id;
+    public String type;
+    public String source;
+    public String destination;
+    public int stops;
+    public int seats;
+    public int price;
+    public int id;
     public String driver;
 
     public Trip(int id, String type, String source, String destination, int stops, int seats, int price, String driver) {
@@ -56,22 +54,28 @@ public class Trip {
         
     }
 
-    public void addTrip(boolean saving) {
+    public void addTrip() {
         String tripData = toCsv();
-        FIO.writeToFile(TRIPSFILE, tripData);
-
-        if (!saving) {
-            System.out.println("Trip was added succesfully");
-        }
+        Common.writeToFile(TRIPSFILE, tripData);
     }
     
     public String toCsv() {
-        return this.id + "," + this.source + "," + this.destination + "," + this.stops + "," + this.seats + "," + this.price + "," + this.driver;
+        return this.id + "," + this.source + "," + this.destination + "," + this.stops + "," + this.seats + ","
+                + this.price + "," + this.driver;
     }
     
-    public String toString() {
-        return "==============\n" + "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
-                + this.stops + "\nSeats: " + this.seats + "\n==============\n";
+    public String info() {
+        return "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
+                + this.stops;
+    }
+
+    public String allInfo() {
+        return "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
+                + this.stops + "\nSeats: " + this.seats + "\nDriver: " + this.driver + "\nType: " + this.type +"\nPrice: " + this.price;
+    }
+    
+    public String toString(String info) {
+        return "==============\n" + info + "\n==============\n";
     }
 
     public static void removeTrip(int id) {
@@ -84,20 +88,27 @@ public class Trip {
 
     }
 
+    public void editTrip() {
+        while (true) {
+            return;
+        }
+    }
+
     public static void listTrips() {
 
         System.out.println("This is list of the available trips:\n\n");
 
         for (short i = 0; i < trips.size(); i++) {
-            System.out.println(trips.get(i).toString() );
+            Trip trip = trips.get(i);
+            System.out.println(trip.toString(trip.info()) );
         }
     }
 
     public static void saveTrips() {
-        FIO._writeToFile(TRIPSFILE, CSVOPEN, false);
+        Common._writeToFile(TRIPSFILE, CSVOPEN, false);
 
         for (short i = 0; i < trips.size(); i++) {
-            trips.get(i).addTrip(true);
+            trips.get(i).addTrip();
         }
     }
 

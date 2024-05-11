@@ -1,6 +1,9 @@
 package bts;
 
 import java.io.*;
+import java.util.Scanner;
+
+import bts.Trip;
 
 public class Manager extends User {
     public Manager() {
@@ -13,11 +16,74 @@ public class Manager extends User {
         If you log in as a manager you are able to review all trips in the system,you are able to add / remove trips and assign drivers the trips in the system 
         */
 
-        System.out.println("Starting a manager flow");
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+
+            System.out.println(
+                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\n\n");
+
+            switch (scanner.nextLine().toUpperCase()) {
+                case "L":
+                    Trip.listTrips();
+                    break;
+
+                case "A":
+                    addTrip(scanner);
+                    break;
+                case "R":
+                    removeTrip(scanner);
+                    break;
+                case "E":
+                    editTrip(scanner);
+                default:
+                    break;
+            }
+
+        }
 
     }
-}
 
+    public void addTrip(Scanner scanner) {
+
+        String source = Common.getData(scanner, "Source: ");
+        String Destination = Common.getData(scanner, "Destination: ");
+        String Type = Common.getData(scanner, "Type: ");
+        String Stops = Common.getData(scanner, "Stops: ");
+        String Seats = Common.getData(scanner, "Seats: ");
+        String Price = Common.getData(scanner, "Price: ");
+        String Driver = Common.getData(scanner, "Driver: ");
+
+        Trip trip = new Trip(Trip.trips.getLast().id + 1, Type, source, Destination, Integer.parseInt(Stops),
+                Integer.parseInt(Seats), Integer.parseInt(Price), Driver);
+
+        trip.addTrip();
+
+    }
+
+    public void removeTrip(Scanner scanner) {
+        System.out.println("Please type the id of the trip you want to remove");
+        String id = scanner.nextLine();
+        if (id.isEmpty()) {
+            break;
+        }
+        Trip.removeTrip(Integer.parseInt(id));
+    }
+    
+    public void editTrip(Scanner scanner) {
+        System.out.println("Please type the id of the trip you want to edit: ");
+        int id = Integer.parseInt(scanner.nextLine());
+
+        for (short i = 0; i < Trip.trips.size(); i++) {
+            Trip trip = Trip.trips.get(i);
+            if (trip.id == id) {
+                trip.editTrip();
+                return;
+            }
+        }
+    }
+
+}
 
 // public class Manager extends Employee {
 //     public Manager() {
@@ -73,5 +139,3 @@ public class Manager extends User {
 //         }
 //     }
 // }
-
-

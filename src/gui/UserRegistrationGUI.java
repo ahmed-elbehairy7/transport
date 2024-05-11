@@ -10,7 +10,7 @@ public class UserRegistrationGUI extends JFrame {
 
     public UserRegistrationGUI() {
         setTitle("User Authentication");
-        setSize(400, 1000);
+        setSize(600, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(1, 2));
 
@@ -153,7 +153,7 @@ class SignUpDialog extends JDialog {
 
     public SignUpDialog(JFrame parent) {
         super(parent, "Sign Up", true);
-        setSize(400, 250);
+        setSize(500, 250);
         setLocationRelativeTo(parent);
         setLayout(new GridLayout(7, 2));
 

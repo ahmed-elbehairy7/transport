@@ -3,8 +3,9 @@ package bts;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
-public class FIO {
+public class Common {
 
     public static boolean writeToFile(String fileName, String data) {
         return _writeToFile(fileName, data, true);
@@ -25,5 +26,14 @@ public class FIO {
             return false;
         }
 
+    }
+
+    public static String getData(Scanner scanner, String prompt) {
+        String data;
+        do {
+            System.out.print(prompt);
+            data = scanner.nextLine();
+        } while (data.length() < 4);
+        return data;
     }
 }
