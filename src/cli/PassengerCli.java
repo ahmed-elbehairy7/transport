@@ -1,25 +1,22 @@
-package bts;
+package cli;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.lang.System;
 
-import bts.Ticket;
-import bts.User;
+import behindTheScenes.*;
 
-public class Passenger extends User {
+public class PassengerCli extends UserCli {
 
-    public static ArrayList<Savable> instances = new ArrayList<>();
-    public final static String savedPath = "passengers.csv";
-    public final static String className = "Passenger";
 
-    public Passenger(int id, String name, String username, String password, String Email) {
-        super(id, name, username, password, Email);
-        Passenger.instances.add(this);
-    }
-    public Passenger() {
+    public PassengerCli() {
         super(Passenger.instances, Passenger.savedPath, Passenger.className);
-        Passenger.instances.add(this);
+        Passenger.instances.add(
+                new Passenger(
+                        this.id,
+                        this.name,
+                        this.username,
+                        this.password,
+                        this.Email));
     }
 
     public void startFlow() {
@@ -70,7 +67,7 @@ public class Passenger extends User {
         
         for (short i = 0; i < Ticket.instances.size(); i++) {
             if (Ticket.instances.get(i).id == id) {
-                removeInstance(id, Ticket.instances, Ticket.savedPath, Ticket.csvHeader);
+                Ticket.removeInstance(id, Ticket.instances, Ticket.savedPath, Ticket.csvHeader);
             }
         }
     }

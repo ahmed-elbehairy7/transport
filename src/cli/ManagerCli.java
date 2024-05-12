@@ -1,28 +1,21 @@
-package bts;
+package cli;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import bts.Driver;
-import bts.Savable;
-import bts.Trip;
-import bts.Validations;
-import bts.Vehicle;
+import behindTheScenes.*;
 
-public class Manager extends User {
+public class ManagerCli extends UserCli {
 
-    public static ArrayList<Savable> instances = new ArrayList<>();
-    public final static String className = "Manager";
-    public final static String savedPath = "managers.csv";    
-
-    public Manager(int id, String name, String username, String password, String Email) {
-        super(id, name, username, password, Email);
-        Manager.instances.add(this);
-    }
-    public Manager() {
+    public ManagerCli() {
         super(Manager.instances, Manager.savedPath, Manager.className);
-        Manager.instances.add(this);
+        Manager.instances.add(
+                new Manager(
+                        this.id,
+                        this.name,
+                        this.username,
+                        this.password,
+                        this.Email));
+    
     }
 
     public void startFlow() {
@@ -78,33 +71,33 @@ public class Manager extends User {
     }
 
     public void addEmployee(Scanner scanner) {
-        String Name = getData(scanner, "Name: ");
-        String Email = _getData(scanner, "Email: ", "email");
-        String Username = _getData(scanner, "Username: ", "duser");
+        String Name = Savable.getData(scanner, "Name: ");
+        String Email = Savable._getData(scanner, "Email: ", "email");
+        String Username = Savable._getData(scanner, "Username: ", "duser");
         new Driver(Name, Username, "initial", Email);
-        saveInstances(Driver.instances, Driver.savedPath, Driver.csvHeader);
+        Driver.saveInstances(Driver.instances, Driver.savedPath, Driver.csvHeader);
     }
 
     public void addVehicle(Scanner scanner) {
         
-        String Type = getData(scanner, "Type: ");
-        int Capacity = Integer.parseInt(_getData(scanner, "Capacity: ", "int"));
-        String LicensePlate = getData(scanner, "License Plate: ");
+        String Type = Savable.getData(scanner, "Type: ");
+        int Capacity = Integer.parseInt(Savable._getData(scanner, "Capacity: ", "int"));
+        String LicensePlate = Savable.getData(scanner, "License Plate: ");
 
-        Vehicle vehicle = new Vehicle(Type, Capacity, LicensePlate);
+        new Vehicle(Type, Capacity, LicensePlate);
         Vehicle.saveInstances(Vehicle.instances, Vehicle.savedPath, Vehicle.csvHeader);
     }
 
     public void addTrip(Scanner scanner) {
 
-        String source = getData(scanner, "Source: ");
-        String Destination = getData(scanner, "Destination: ");
-        String Type = _getData(scanner, "Type: ", "tType");
-        String Stops = _getData(scanner, "Stops: ", "int");
-        String Seats = _getData(scanner, "Seats: ", "int");
-        String Price = _getData(scanner, "Price: ", "int");
-        String DriverId = _getData(scanner, "DriverId: ", "int");
-        String cycle = _getData(scanner, "Cycle: ", "cycle");
+        String source = Savable.getData(scanner, "Source: ");
+        String Destination = Savable.getData(scanner, "Destination: ");
+        String Type = Savable._getData(scanner, "Type: ", "tType");
+        String Stops = Savable._getData(scanner, "Stops: ", "int");
+        String Seats = Savable._getData(scanner, "Seats: ", "int");
+        String Price = Savable._getData(scanner, "Price: ", "int");
+        String DriverId = Savable._getData(scanner, "DriverId: ", "int");
+        String cycle = Savable._getData(scanner, "Cycle: ", "cycle");
 
 
         Trip trip = new Trip(Type, source, Destination, Integer.parseInt(Stops), Integer.parseInt(Seats), Integer.parseInt(Price), Integer.parseInt(DriverId), cycle);

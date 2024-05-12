@@ -1,4 +1,4 @@
-package bts;
+package behindTheScenes;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import bts.Trip;
-import bts.User;
+import behindTheScenes.Trip;
+import behindTheScenes.User;
 
 public class Driver extends User {
 
@@ -26,10 +26,6 @@ public class Driver extends User {
         Driver.instances.add(this);
     }
 
-    public Driver() {
-        super(Driver.instances, Driver.savedPath, Driver.className);
-        Driver.instances.add(this);
-    }
 
     public static void listDrivers() {
         try {
@@ -45,35 +41,6 @@ public class Driver extends User {
             System.out.println("There was an error while lising drivers");
         }
         
-    }
-
-    public void startFlow() {
-        /*
-        If you log in with a driver credentials you are directed to the drivers profile with some basic information about the driver and the trips that are assigned to him by the manager. 
-        */
-
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("\n\nPlease choose one of the following:\n\n(P) Personal info\n(T) Trips\n");
-
-            switch (scanner.nextLine().toUpperCase()) {
-                case "P":
-                    System.out.println(toString());
-                    break;
-                case "T":
-                     System.out.println("\n\nHere's the trips assigned to you: \n");
-                     for (short i = 0; i < Trip.instances.size(); i++) {
-                         Trip trip = (Trip) Trip.instances.get(i);
-                         if (this.id ==trip.driverId) {
-                             System.out.println(trip.toString(trip.info()));
-                         }
-                     }
-                     break;
-                default:
-                    break;
-            }
-        }
-
     }
 
     public String toString() {

@@ -1,12 +1,6 @@
-package bts;
+package behindTheScenes;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import bts.Savable;
 
 public class Ticket extends Savable {
 
@@ -65,7 +59,7 @@ public class Ticket extends Savable {
     public static void newInstance(String line) {
         String[] data = line.split(",");
 
-        Ticket ticket = new Ticket(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
+        new Ticket(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]));
 
         

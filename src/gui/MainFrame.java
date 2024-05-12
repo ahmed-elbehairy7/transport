@@ -1,22 +1,43 @@
 package gui;
 
-import java.awt.Color;
-import javax.swing.JFrame;
+import java.awt.GridLayout;
 
-public class MainFrame extends JFrame {
+import behindTheScenes.Driver;
+import behindTheScenes.Manager;
+import behindTheScenes.Passenger;
+
+public class MainFrame extends Frame{
     
     public MainFrame() {
+        super();
 
-        this.setTitle("Transport Company App");
-        this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+        setLayout(new GridLayout(3, 1));
 
-        this.setSize(720, 720);
+        //Passenger button
+        Button PassengerButton = new Button(Passenger.className);
+        PassengerButton.addActionListener(e -> {
+            dispose();
+            Passenger.initiateClass();
+            new Login(Passenger.className);
+        });
+        add(PassengerButton);
 
-        this.getContentPane().setBackground(Color.BLACK);
-        
-        
+        //Manager button
+        Button ManagerButton = new Button(Manager.className);
+        ManagerButton.addActionListener(e -> {
+            dispose();
+            Manager.initiateClass();
+            new Login(Manager.className);
+        });
+        add(ManagerButton);
+
+        //Driver button
+        Button DriverButton = new Button(Driver.className);
+        DriverButton.addActionListener(e -> {
+            dispose();
+            Driver.initiateClass();
+            new Login(Driver.className);
+        });
+        add(DriverButton);
     }
-
-}
+    }

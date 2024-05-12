@@ -1,43 +1,24 @@
-package bts;
+package cli;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import bts.Savable;
-import bts.Ticket;
-import bts.Vehicle;
-
 import java.lang.System;
-import java.io.FileReader;
-import java.io.BufferedReader;
+
+import behindTheScenes.*;
 
 
-public class User extends Savable{
+public class UserCli {
     public static String csvHeader = "id,Name,Email,username,password";
 
+    public int id;
     public String name;
     public String username;
     public String password;
     public String Email;
     public boolean success = false;
     
-    public User(int id, String name, String username, String password, String Email) {
-        this.id = id;
 
-        this.name = name;
-        this.Email = Email;
-        this.username = username;
-        this.password = password;
-
-    }
-
-    public User(ArrayList<Savable> instances, String savedPath, String className) {
+    public UserCli(ArrayList<Savable> instances, String savedPath, String className) {
         //Initialize the scanner
         Scanner scanner = new Scanner(System.in);
         
@@ -83,14 +64,13 @@ public class User extends Savable{
                 break;
         }
 
-        this.name = getData(scanner, "Enter your name: ");
-        this.Email = _getData(scanner, "Enter your email: ", "email");
-        this.username = _getData(scanner, "Enter your username: ", t);
-        this.password = _getData(scanner, "Enter your password: ", "pass");
-        this.id = generateId(instances);
+        this.name = Savable.getData(scanner, "Enter your name: ");
+        this.Email = Savable._getData(scanner, "Enter your email: ", "email");
+        this.username = Savable._getData(scanner, "Enter your username: ", t);
+        this.password = Savable._getData(scanner, "Enter your password: ", "pass");
 
-        writeInstance(savedPath);
-
+        User user = User.register(name, Email, username, password, instances, savedPath, className);
+        this.id = user.id;
         this.success = true;
     }
     
@@ -103,31 +83,24 @@ public class User extends Savable{
 
         Scanner scanner = new Scanner(System.in);
 
-        String username = getData(scanner, "Enter your username: ");
-        String password = _getData(scanner, "Enter your password: ", "pass");
+        String username = Savable.getData(scanner, "Enter your username: ");
+        String password = Savable._getData(scanner, "Enter your password: ", "pass");
 
-        User user;
-        for (short i = 0; i < instances.size(); i++) {
-            user = ((User) instances.get(i));
-            if (!(user.username.equals(username))) {
-                continue;
-            }
-            if (!(user.password.equals(password))) {
-                continue;
-            }
-            this.id = user.id;
-            this.name = user.name;
-            this.username = user.username;
-            this.Email = user.Email;
-            this.password = user.password;
-            this.success = true;
-            return true;
+        User user = User.login(username, password, instances);
+        if (!user.success) {
+            return false;
         }
-        System.out.println("Invalid username or password");
-        return false;
+        this.id = user.id;
+        this.name = user.name;
+        this.Email = user.Email;
+        this.username = user.username;
+        this.success = true;
+        this.password = password;
+        return true;
+        
     }
    
     public static void initiateClass(String usersFile, String className, ArrayList<Savable> instances) {
-        initiateClass(usersFile, User.csvHeader, className, instances);
+        User.initiateClass(usersFile, User.csvHeader, className, instances);
     }
 }

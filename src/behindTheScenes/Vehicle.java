@@ -1,9 +1,6 @@
-package bts;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
+package behindTheScenes;
 
-import bts.Savable;
+import java.util.ArrayList;
 
 public class Vehicle extends Savable {
 

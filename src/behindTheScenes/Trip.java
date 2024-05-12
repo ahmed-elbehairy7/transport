@@ -1,10 +1,7 @@
-package bts;
+package behindTheScenes;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import bts.Savable;
-import bts.Validations;
 
 public class Trip extends Savable {
 
@@ -83,7 +80,7 @@ public class Trip extends Savable {
         System.out.println("Please press enter to view list of available drivers");
         scanner.nextLine();
         Driver.listDrivers();
-        this.driverId = Integer.parseInt(_getData(scanner, "\nNew Driver Id: ", "int"));
+        this.driverId = Integer.parseInt(Savable._getData(scanner, "\nNew Driver Id: ", "int"));
         saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
 
     }
@@ -98,25 +95,25 @@ public class Trip extends Savable {
 
             switch (scanner.nextLine().toUpperCase()) {
                 case "0":
-                    this.source = getData(scanner, prompt);
+                    this.source = Savable.getData(scanner, prompt);
                     break;
                 case "1":
-                    this.destination = getData(scanner, prompt);
+                    this.destination = Savable.getData(scanner, prompt);
                     break;
                 case "2":
-                    this.type = _getData(scanner, prompt, "tType");
+                    this.type = Savable._getData(scanner, prompt, "tType");
                     break;
                 case "3":
-                    this.stops = Integer.parseInt(_getData(scanner, prompt, "int"));
+                    this.stops = Integer.parseInt(Savable._getData(scanner, prompt, "int"));
                     break;
                 case "4":
-                    this.seats = Integer.parseInt(_getData(scanner, prompt, "int"));
+                    this.seats = Integer.parseInt(Savable._getData(scanner, prompt, "int"));
                     break;
                 case "5":
-                    this.price = Integer.parseInt(_getData(scanner, prompt, "int"));
+                    this.price = Integer.parseInt(Savable._getData(scanner, prompt, "int"));
                     break;
                 case "6":
-                    this.driverId = Integer.parseInt(_getData(scanner, prompt, "int"));
+                    this.driverId = Integer.parseInt(Savable._getData(scanner, prompt, "int"));
                     break;
                 case "S":
                     saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);

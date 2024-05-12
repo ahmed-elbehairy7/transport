@@ -1,9 +1,10 @@
 import java.util.Scanner;
 
-import bts.Passenger;
-import bts.Manager;
-import bts.Driver;
+import behindTheScenes.Passenger;
+import behindTheScenes.Manager;
+import behindTheScenes.Driver;
 import gui.MainFrame;
+import cli.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,23 +26,24 @@ public class Main {
     }
     
     private static void cli() {
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please choose a user type:\n\n(P) Passenger:\n(M) Manager:\n(D) Driver:\n\n");
 
         switch (scanner.nextLine().toUpperCase()) {
             case "P":
                 Passenger.initiateClass();
-                Passenger passenger = new Passenger();
+                PassengerCli passenger = new PassengerCli();
                 passenger.startFlow();
                 break;
             case "M":
                 Manager.initiateClass();
-                Manager manager = new Manager();
+                ManagerCli manager = new ManagerCli();
                 manager.startFlow();
                  break;
             case "D":
                 Driver.initiateClass();
-                Driver driver = new Driver();
+                DriverCli driver = new DriverCli();
                 driver.startFlow();
                 break;
         

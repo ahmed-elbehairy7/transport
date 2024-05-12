@@ -5,12 +5,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class ManagerGUI extends JFrame {
+public class ManagerGui extends JFrame {
     private JTextField driverEmailField, tripNumberField;
     private JButton assignDriverButton;
     private JTextArea outputTextArea;   
 
-    public ManagerGUI() {
+    public ManagerGui() {
         setTitle("Manager Menu");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,7 +46,7 @@ public class ManagerGUI extends JFrame {
         String driverEmail = driverEmailField.getText();
         int tripNumber = Integer.parseInt(tripNumberField.getText());
 
-        ManagerGUI manager = new ManagerGUI();
+        ManagerGui manager = new ManagerGui();
         manager.assignDriverToTrip();
 
         // Update output text area
@@ -56,7 +56,7 @@ public class ManagerGUI extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new ManagerGUI().setVisible(true);
+                new ManagerGui().setVisible(true);
             }
         });
     }

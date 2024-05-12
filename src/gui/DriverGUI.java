@@ -6,11 +6,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class DriverGUI extends JFrame {
+public class DriverGui extends JFrame {
     private JButton viewInfoButton, viewAssignedTripsButton;
     private JTextArea outputTextArea;
 
-    public DriverGUI() {
+    public DriverGui() {
         setTitle("Driver Menu");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,7 +51,7 @@ public class DriverGUI extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new DriverGUI().setVisible(true);
+                new DriverGui().setVisible(true);
             }
         });
     }
