@@ -1,5 +1,5 @@
 @echo off
 
-javac gui/UserRegistrationGUI.java -d ../dist
+javac main/Main.java -d ../dist
 
-if not errorlevel 1 java -cp ../dist gui.UserRegistrationGUI
+if not errorlevel 1 java -cp ../dist Main --gui

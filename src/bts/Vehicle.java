@@ -3,55 +3,54 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Vehicle {
+import bts.Savable;
+
+public class Vehicle extends Savable {
+
+    public static ArrayList<Savable> instances = new ArrayList<>();
+    public final static String csvHeader = "type,capacity,licensePlate";
+    public final static String savedPath = "vehicles.csv";
+
     private String type;
-    private  int capacity=0;
+    private int capacity;
     private String licensePlate;
-    public Vehicle(){}
+
     public Vehicle(String type, int capacity, String licensePlate) {
         this.type = type;
         this.capacity = capacity;
         this.licensePlate = licensePlate;
-    }
-    public void Display() {
-        int counter = 0;
-        File myObj = new File("Vehicles.txt");
-        try {
-            Scanner myReader = new Scanner(myObj);
-            if (!myReader.hasNextLine()) {
-                System.out.println("The file Vehicles.txt is empty.");
-                myReader.close();
-                return;
-            }
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                System.out.println(data);
-                counter++;
-            }
-            myReader.close();
-            System.out.println("The number of cars in company: " + (counter/3));
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-    public static void addVehicle(Vehicle vehicle){
-        ArrayList<Vehicle>addVehicle=new ArrayList<>();
-        addVehicle.add(vehicle);
-        WriteInFile("Vehicles.txt",addVehicle,true);
-        System.out.println("The Vehicle Is Added Successfully !");
-    }
-    public static void WriteInFile(String FileName, ArrayList<Vehicle>FileContent,boolean app) {
-        try {
-            FileWriter myWriter = new FileWriter(FileName,app);
-            for (int i = 0; i < FileContent.size(); i++){
-                myWriter.write( "The Vehicle Type: " + FileContent.get(i).type + "\nThe Vehicle Plate: " + FileContent.get(i).licensePlate + "\nThe Vehicle Capacity: " + FileContent.get(i).capacity +"\n");
 
-                myWriter.close();
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        Vehicle.instances.add(this);
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public static void newInstance(String line) {
+
+        String[] data = line.split(",");
+
+        new Vehicle(data[0], Integer.parseInt(data[1]), data[2]);
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public String toString() {
+        return "Type: " + this.type + "\nCapacity: " + this.capacity + "\nLicense Plate: " + this.licensePlate;
+    }
+
+    public void displayInfo() {
+        System.out.println(this.toString());
+    }
+
+    public String toCsv() {
+        return this.type + "," + this.capacity + "," + this.licensePlate;
+    }
+
+    public static void initiateClass() {
+        initiateClass(Vehicle.savedPath, Vehicle.csvHeader, "Vehicles", Vehicle.instances);
     }
 }

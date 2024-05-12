@@ -1,13 +1,26 @@
 package bts;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import bts.Driver;
 import bts.Trip;
+import bts.Vehicle;
 
 public class Manager extends User {
+
+    public static ArrayList<Savable> instances = new ArrayList<>();
+    public final static String className = "Manager";
+    public final static String savedPath = "managers.csv";    
+
+    public Manager(int id, String name, String username, String password, String Email) {
+        super(id, name, username, password, Email);
+        Manager.instances.add(this);
+    }
     public Manager() {
-        super("manager");
+        super(Manager.instances, Manager.savedPath);
+        Manager.instances.add(this);
     }
 
     public void startFlow() {
@@ -21,13 +34,12 @@ public class Manager extends User {
         while (true) {
 
             System.out.println(
-                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\n(Q) Quit\n\n");
+                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\n(D) Assign a driver\n(V) Add a vehicle\n(M) Add an Employee (driver)\n(G) Generate report\n(Q) Quit\n\n");
 
             switch (scanner.nextLine().toUpperCase()) {
                 case "L":
-                    Trip.listTrips();
+                    Trip.listInstances(Trip.instances);
                     break;
-
                 case "A":
                     addTrip(scanner);
                     break;
@@ -35,7 +47,20 @@ public class Manager extends User {
                     removeTrip(scanner);
                     break;
                 case "E":
-                    editTrip(scanner);
+                    editTrip(scanner, false);
+                    break;
+                case "D":
+                    editTrip(scanner, true);
+                    break;
+                case "V":
+                    addVehicle(scanner);
+                    break;
+                case "M":
+                    addEmployee(scanner);
+                    break;
+                case "G":
+                    generateReport(scanner);
+                    break;
                 case "Q":
                     return;
                 default:
@@ -46,20 +71,43 @@ public class Manager extends User {
 
     }
 
+    public void generateReport(Scanner scanner) {
+        System.out.println("Managers in company");
+    }
+
+    public void addEmployee(Scanner scanner) {
+        String Name = getData(scanner, "Name: ");
+        String Email = getData(scanner, "Email: ");
+        String Username = getData(scanner, "Username: ");
+        new Driver(Name, Username, "initial", Email);
+        saveInstances(Driver.instances, Driver.savedPath, Driver.csvHeader);
+    }
+
+    public void addVehicle(Scanner scanner) {
+        
+        String Type = getData(scanner, "Type: ");
+        int Capacity = Integer.parseInt(_getData(scanner, "Capacity: ", 1));
+        String LicensePlate = getData(scanner, "License Plate: ");
+
+        Vehicle vehicle = new Vehicle(Type, Capacity, LicensePlate);
+        Vehicle.saveInstances(Vehicle.instances, Vehicle.savedPath, Vehicle.csvHeader);
+    }
+
     public void addTrip(Scanner scanner) {
 
-        String source = Common.getData(scanner, "Source: ");
-        String Destination = Common.getData(scanner, "Destination: ");
-        String Type = Common.getData(scanner, "Type: ");
-        String Stops = Common._getData(scanner, "Stops: ", 1);
-        String Seats = Common._getData(scanner, "Seats: ", 1);
-        String Price = Common._getData(scanner, "Price: ", 1);
-        String Driver = Common.getData(scanner, "Driver: ");
+        String source = getData(scanner, "Source: ");
+        String Destination = getData(scanner, "Destination: ");
+        String Type = getData(scanner, "Type: ");
+        String Stops = _getData(scanner, "Stops: ", 1);
+        String Seats = _getData(scanner, "Seats: ", 1);
+        String Price = _getData(scanner, "Price: ", 1);
+        String DriverId = _getData(scanner, "DriverId: ", 1);
+        String cycle = getData(scanner, "Cycle: ");
 
-        Trip trip = new Trip(Type, source, Destination, Integer.parseInt(Stops),
-                Integer.parseInt(Seats), Integer.parseInt(Price), Driver);
 
-        trip.addTrip();
+        Trip trip = new Trip(Type, source, Destination, Integer.parseInt(Stops), Integer.parseInt(Seats), Integer.parseInt(Price), Integer.parseInt(DriverId), cycle);
+
+        trip.writeInstance(Trip.savedPath);
 
     }
 
@@ -69,75 +117,35 @@ public class Manager extends User {
         if (id.isEmpty()) {
             return;
         }
-        Trip.removeTrip(Integer.parseInt(id));
+        Trip.removeInstance(Integer.parseInt(id), Trip.instances, Trip.savedPath, Trip.csvHeader);
     }
     
-    public void editTrip(Scanner scanner) {
+    public void editTrip(Scanner scanner, boolean driver) {
         System.out.println("Please type the id of the trip you want to edit: ");
         int id = Integer.parseInt(scanner.nextLine());
 
-        for (short i = 0; i < Trip.trips.size(); i++) {
-            Trip trip = Trip.trips.get(i);
-            if (trip.id == id) {
-                trip.editTrip();
+        for (short i = 0; i < Trip.instances.size(); i++) {
+            Trip trip = (Trip) Trip.instances.get(i);
+            if (trip.id != id) {
+                continue;
+            }
+            if (driver) {
+                trip.assignDriver();
                 return;
             }
+            trip.editTrip();
+            return;
         }
     }
+    
+    public static void initiateClass() {
+        initiateClass(Manager.savedPath, Manager.className, Manager.instances);
+    }
+
+    public static void newInstance(String line) {
+        String data[] = line.split(",");
+        new Manager(Integer.parseInt(data[0]), data[1], data[3], data[4], data[2]);
+    }
+    
 
 }
-
-// public class Manager extends Employee {
-//     public Manager() {
-//         super("manager", "managers.csv");
-//     }
-//     public void assignDriverToTrip(String DriverEmail, int tripNumber) {
-//         String tripDetails = searchTrip(tripNumber);
-//         String driverName = getDriverName(DriverEmail); // Assuming the email is unique and known
-
-//         if (tripDetails != null && driverName != null) {
-//             writeAssignmentToFile(tripDetails, driverName);
-//         } else {
-//             System.out.println("Trip details or driver name not found.");
-//         }
-//     }
-//     private String searchTrip(int tripNumber) {
-//         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Trips.txt"))) {
-//             String line;
-//             while ((line = bufferedReader.readLine()) != null) {
-//                 if (line.contains("The Trip Number: " + tripNumber)) {
-//                     return line;
-//                 }
-//             }
-//         } catch (IOException e) {
-//             System.out.println("An error occurred while reading the trip file.");
-//             e.printStackTrace();
-//         }
-//         return null;
-//     }
-
-//     private String getDriverName(String email) { //By Email
-//         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Driver.txt"))) {
-//             String line;
-//             while ((line = bufferedReader.readLine()) != null) {
-//                 String[] driverData = line.split(",");
-//                 if (driverData.length > 1 && driverData[1].equals(email)) {
-//                     return driverData[0];
-//                 }
-//             }
-//         } catch (IOException e) {
-//             System.out.println("An error occurred while reading the driver file.");
-//             e.printStackTrace();
-//         }
-//         return null;
-//     }
-//     private void writeAssignmentToFile(String tripDetails, String driverName) {
-//         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("AssignedTripsWithDrivers.txt", true)))) {
-//             out.println(tripDetails + ", " +"The Driver Name: "+ driverName);
-//             System.out.println("Done !");
-//         } catch (IOException e) {
-//             System.out.println("An error occurred while writing to the file.");
-//             e.printStackTrace();
-//         }
-//     }
-// }

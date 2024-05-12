@@ -3,13 +3,48 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import bts.Trip;
 import bts.User;
 
 public class Driver extends User {
+
+    public static ArrayList<Savable> instances = new ArrayList<>();
+    public final static String className = "Driver";
+    public final static String savedPath = "drivers.csv";    
+
+    public Driver( String name, String username, String password, String Email) {
+        super(generateId(Driver.instances), name, username, password, Email);
+        Driver.instances.add(this);
+
+    }
+
+    public Driver(int id, String name, String username, String password, String Email) {
+        super(id, name, username, password, Email);
+        Driver.instances.add(this);
+    }
+
     public Driver() {
-        super("driver");
+        super(Driver.instances, Driver.savedPath);
+        Driver.instances.add(this);
+    }
+
+    public static void listDrivers() {
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader("drivers.csv"));
+        bf.readLine();
+        String line = bf.readLine();
+        while ((line = bf.readLine()) != null) {
+            String[] driverData = line.split(",");
+            System.out.println("\n\nId: " + driverData[0] + "\nName: " + driverData[1]);
+        }
+        }
+        catch (IOException e) {
+            System.out.println("There was an error while lising drivers");
+        }
+        
     }
 
     public void startFlow() {
@@ -17,73 +52,43 @@ public class Driver extends User {
         If you log in with a driver credentials you are directed to the drivers profile with some basic information about the driver and the trips that are assigned to him by the manager. 
         */
 
-        System.out.println(toString());
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n\nPlease choose one of the following:\n\n(P) Personal info\n(T) Trips\n");
 
-
-        System.out.println("\n\nHere's the trips assigned to you: \n");
-        for (short i = 0; i < Trip.trips.size(); i++) {
-            Trip trip = Trip.trips.get(i);
-            if (this.name.equals(trip.driver)) {
-                System.out.println(trip.toString());
+            switch (scanner.nextLine().toUpperCase()) {
+                case "P":
+                    System.out.println(toString());
+                    break;
+                case "T":
+                     System.out.println("\n\nHere's the trips assigned to you: \n");
+                     for (short i = 0; i < Trip.instances.size(); i++) {
+                         Trip trip = (Trip) Trip.instances.get(i);
+                         if (this.id ==trip.driverId) {
+                             System.out.println(trip.toString(trip.info()));
+                         }
+                     }
+                     break;
+                default:
+                    break;
             }
         }
+
     }
 
     public String toString() {
-        return "\n==============\nDriver details:\n\nName:      " + this.name + "\nEmail:     " + this.Email + "\nusername:  " + this.username
+        return "\n==============\nDriver details:\n\nName:      " + this.name + "\nEmail:     " + this.Email
+                + "\nusername:  " + this.username
                 + "\n==============\n";
     }
+    
+    public static void initiateClass() {
+        initiateClass(Driver.savedPath, Driver.className, Driver.instances);
+    }
+
+    public static void newInstance(String line) {
+        String data[] = line.split(",");
+        new Driver(Integer.parseInt(data[0]), data[1], data[3], data[4], data[2]);
+    }
+    
 }
-
-
-
-// public class Driver extends Employee {
-//     public Driver() {
-//         super("driver", "drivers.csv");
-//     }
-//     public void Info(String userName) {
-//         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Driver.txt"))) {
-//             String line;
-//             while ((line = bufferedReader.readLine()) != null) {
-//                 String[] userData = line.split(",");
-//                 if (userData.length > 2 && userData[2].trim().equals(userName.trim())) {
-//                     System.out.println("Driver Name: " + userData[0].trim());
-//                     System.out.println("Driver Email: " + userData[1].trim());
-//                     System.out.println("Driver Username: " + userData[2].trim());
-//                     return;
-//                 }
-//             }
-//             System.out.println("User not found.");
-//         } catch (IOException e) {
-//             System.out.println("An error occurred while reading the file.");
-//             e.printStackTrace();
-//         }
-//     }
-//     public void viewAssignedTrips(String driverName) {
-//         String fileName = "AssignedTripsWithDrivers.txt";
-//         boolean isDriverFound = false;
-//         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
-//             String line;
-//             while ((line = bufferedReader.readLine()) != null) {
-//                 String prefix = "The Driver Name: ";
-//                 int startIndex = line.indexOf(prefix);
-//                 if (startIndex != -1) {
-//                     String nameInFile = line.substring(startIndex + prefix.length()).trim();
-//                     if (nameInFile.equals(driverName)) {
-//                         System.out.println(line);
-//                         isDriverFound = true;
-//                         break;
-//                     }
-//                 }
-//             }
-//             if (!isDriverFound) {
-//                 System.out.println("The Driver Not Found");
-//             }
-//         } catch (FileNotFoundException e) {
-//             System.out.println("The file was not found.");
-//         } catch (IOException e) {
-//             System.out.println("An error occurred while reading the file.");
-//             e.printStackTrace();
-//         }
-//     }
-// }

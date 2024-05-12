@@ -1,47 +1,43 @@
 package bts;
-import java.io.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import bts.Common;
+import bts.Savable;
 
-public class Trip {
+public class Trip extends Savable {
 
-    public static String CSVOPEN = "id,type,source,destination,stops,seats,price,driver";
-    public static String TRIPSFILE = "trips.csv";
-    public static ArrayList<Trip> trips = new ArrayList<Trip>();
+    public static ArrayList<Savable> instances = new ArrayList<>();
+    public final static String csvHeader = "id,type,source,destination,stops,seats,price,driverId,cycle";
+    public final static String savedPath = "trips.csv";
+    public final static String className = "Trip";
 
     public String type;
     public String source;
     public String destination;
+    public String cycle;
     public int stops;
     public int seats;
     public int price;
-    public int id;
-    public String driver;
+    public int driverId;
 
-    public Trip(String type, String source, String destination, int stops, int seats, int price, String driver) {
-
-        if (trips.size() == 0) {
-            this.id = 1;
-        }
-        else {
-            this.id = trips.getLast().id + 1;
-        }
+    public Trip(String type, String source, String destination, int stops, int seats, int price, int driverId,
+            String cycle) {
+        super();
+        this.id = generateId(Trip.instances);
         this.type = type;
         this.source = source;
         this.destination = destination;
         this.stops = stops;
         this.seats = seats;
         this.price = price;
-        this.driver = driver;
-
-        trips.add(this);
-
+        this.cycle = cycle;
+        this.driverId = driverId;
+        Trip.instances.add(this);
     }
-
-    public Trip(int id, String type, String source, String destination, int stops, int seats, int price, String driver) {
-
+    
+    public Trip(int id, String type, String source, String destination, int stops, int seats, int price, int driverId, String cycle) {
+        super();
         this.id = id;
         this.type = type;
         this.source = source;
@@ -49,63 +45,45 @@ public class Trip {
         this.stops = stops;
         this.seats = seats;
         this.price = price;
-        this.driver = driver;
+        this.cycle = cycle;
+        this.driverId = driverId;
+        Trip.instances.add(this);
+    }
 
-        trips.add(this);
+    public static void initiateClass() {
+        initiateClass(Trip.savedPath,Trip.csvHeader, Trip.className, Trip.instances);
 
     }
 
-    public static void getTrips() {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(TRIPSFILE));
-        String line;
-        bufferedReader.readLine();
-        while ((line = bufferedReader.readLine()) != null) {
-            String[] tripData = line.split(",");
-
-            new Trip(Integer.parseInt(tripData[0]), tripData[1], tripData[2], tripData[3], Integer.parseInt(tripData[4]), Integer.parseInt(tripData[5]), Integer.parseInt(tripData[6]), tripData[7]);
-        }
-    } catch (FileNotFoundException e) {
-        saveTrips();
-        getTrips();
-    } catch (IOException e) {
-        System.out.println("An error occured while getting stored trips");
-        e.printStackTrace();
-    }
-        
-    }
-
-    public void addTrip() {
-        Common.writeToFile(TRIPSFILE, toCsv());
-    }
     
+    public static void newInstance(String line) {
+
+        String[] data = line.split(",");
+
+        new Trip(Integer.parseInt(data[0]), data[1], data[2], data[3], Integer.parseInt(data[4]),
+                Integer.parseInt(data[5]), Integer.parseInt(data[6]), Integer.parseInt(data[7]), data[8]);
+    }
+
     public String toCsv() {
-        return this.id + "," + this.source + "," + this.destination + "," + this.stops + "," + this.seats + ","
-                + this.price + "," + this.driver;
-    }
-    
-    public String info() {
-        return "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
-                + this.stops;
+        return this.id + "," + this.type + "," + this.source + "," + this.destination + "," + this.stops + ","
+                + this.seats + "," + this.price + "," + this.driverId + "," + this.cycle;
     }
 
     public String allInfo() {
         return "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
-                + this.stops + "\nSeats: " + this.seats + "\nDriver: " + this.driver + "\nType: " + this.type +"\nPrice: " + this.price;
+                + this.stops + "\nSeats: " + this.seats + "\nDriver: " + this.driverId + "\nType: " + this.type
+                + "\nPrice: " + this.price;
     }
     
-    public String toString(String info) {
-        return "==============\n" + info + "\n==============\n";
-    }
-
-    public static void removeTrip(int id) {
-        for (short i = 0; i < trips.size(); i++) {
-            if (trips.get(i).id == id) {
-                trips.remove(i);
-                Trip.saveTrips();
-                System.out.println("\n\nTrip with id " + id + " successfully deleted\n\n");
-            }
-        }
+    public void assignDriver() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n\nChoosed Trip:\n");
+        System.out.println(toString(allInfo()));
+        System.out.println("Please press enter to view list of available drivers");
+        scanner.nextLine();
+        Driver.listDrivers();
+        this.driverId = Integer.parseInt(_getData(scanner, "\n\nNew Driver Id: ", 1));
+        saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
 
     }
 
@@ -113,35 +91,37 @@ public class Trip {
         Scanner scanner = new Scanner(System.in);
         String prompt = "\nNew Value: ";
         while (true) {
+            System.out.println(toString(allInfo()));
             System.out.println(
                     "Please choose what to edit:\n\n(0) Source\n(1) Destination\n(2) Type\n(3) Stops\n(4) Seats\n(5) Price\n(6) Driver\n(S) Save and exit\n(Q) Quit without saving\n\n");
 
-            switch (scanner.nextLine()) {
+            switch (scanner.nextLine().toUpperCase()) {
                 case "0":
-                    this.source = Common.getData(scanner, prompt);
+                    this.source = getData(scanner, prompt);
                     break;
                 case "1":
-                    this.source = Common.getData(scanner, prompt);
+                    this.destination = getData(scanner, prompt);
                     break;
                 case "2":
-                    this.source = Common.getData(scanner, prompt);
+                    this.type = getData(scanner, prompt);
                     break;
                 case "3":
-                    this.source = Common.getData(scanner, prompt);
+                    this.stops = Integer.parseInt(_getData(scanner, prompt, 1));
                     break;
                 case "4":
-                    this.source = Common.getData(scanner, prompt);
+                    this.seats = Integer.parseInt(_getData(scanner, prompt, 1));
                     break;
                 case "5":
-                    this.source = Common.getData(scanner, prompt);
+                    this.price = Integer.parseInt(_getData(scanner, prompt, 1));
                     break;
                 case "6":
-                    this.source = Common.getData(scanner, prompt);
+                    this.driverId = Integer.parseInt(_getData(scanner, prompt, 1));
                     break;
                 case "S":
-                    saveTrips();
+                    saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
                     return;
                 case "Q":
+                    getSaved(Trip.instances, Trip.savedPath, Trip.className, Trip.csvHeader);
                     return;
                 default:
                     break;
@@ -149,22 +129,16 @@ public class Trip {
         }
     }
 
-    public static void listTrips() {
-
-        System.out.println("This is list of the available trips:\n\n");
-
-        for (short i = 0; i < trips.size(); i++) {
-            Trip trip = trips.get(i);
-            System.out.println(trip.toString(trip.info()) );
-        }
+    public String info() {
+        return "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
+                + this.stops + "\nCycle: " + this.cycle;
+    }
+    
+    public String toString() {
+        return "==============\n" + info() + "\n==============\n";
     }
 
-    public static void saveTrips() {
-        Common._writeToFile(TRIPSFILE, CSVOPEN, false);
-
-        for (short i = 0; i < trips.size(); i++) {
-            trips.get(i).addTrip();
-        }
+    public String toString(String info) {
+        return "==============\n" + info + "\n==============\n";
     }
-
 }

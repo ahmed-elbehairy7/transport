@@ -1,5 +1,6 @@
 package bts;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.lang.System;
 
@@ -8,9 +9,17 @@ import bts.User;
 
 public class Passenger extends User {
 
-   
+    public static ArrayList<Savable> instances = new ArrayList<>();
+    public final static String savedPath = "passengers.csv";
+    public final static String className = "Passenger";
+
+    public Passenger(int id, String name, String username, String password, String Email) {
+        super(id, name, username, password, Email);
+        Passenger.instances.add(this);
+    }
     public Passenger() {
-        super("passenger");
+        super(Passenger.instances, Passenger.savedPath);
+        Passenger.instances.add(this);
     }
 
     public void startFlow() {
@@ -59,9 +68,9 @@ public class Passenger extends User {
         }
         int id = Integer.parseInt(ans);
         
-        for (short i = 0; i < Ticket.tickets.size(); i++) {
-            if (Ticket.tickets.get(i).id == id) {
-                Ticket.removeTicket(id);
+        for (short i = 0; i < Ticket.instances.size(); i++) {
+            if (Ticket.instances.get(i).id == id) {
+                removeInstance(id, Ticket.instances, Ticket.savedPath, Ticket.csvHeader);
             }
         }
     }
@@ -74,8 +83,8 @@ public class Passenger extends User {
 
         System.out.println("List of the available trips:\n\n");
 
-        for (short i = 0; i < Trip.trips.size(); i++) {
-            Trip trip = Trip.trips.get(i);
+        for (short i = 0; i < Trip.instances.size(); i++) {
+            Trip trip = (Trip) Trip.instances.get(i);
             System.out.println(trip.toString("Index: " + i + "\n" + trip.info()));
         }
 
@@ -85,7 +94,7 @@ public class Passenger extends User {
             return;
         }
         int index = Integer.parseInt(ans);
-        Trip trip = Trip.trips.get(index);
+        Trip trip = (Trip) Trip.instances.get(index);
 
         if (trip.seats == 0) {
             System.out.println(
@@ -107,8 +116,9 @@ public class Passenger extends User {
         switch (scanner.nextLine().toUpperCase()) {
             case "Y":
                 new Ticket(this.id, trip.id);
-                Trip.trips.get(index).seats -= 1;
-                Trip.saveTrips();
+                Ticket.saveInstances(Ticket.instances, Ticket.savedPath, Ticket.csvHeader);
+                ((Trip) Trip.instances.get(index)).seats -= 1;
+                Trip.saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
                 break;
 
             default:
@@ -117,4 +127,12 @@ public class Passenger extends User {
 
     }
     
+    public static void initiateClass() {
+        initiateClass(Passenger.savedPath, Passenger.className, Ticket.instances);
+    }
+
+    public static void newInstance(String line) {
+        String data[] = line.split(",");
+        new Passenger(Integer.parseInt(data[0]), data[1], data[3], data[4], data[2]);
+    }
 }

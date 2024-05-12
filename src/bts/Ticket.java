@@ -6,101 +6,92 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Ticket {
+import bts.Savable;
 
-    public static ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-    public static String CSVOPEN = "id,passengerId,tripId";
-    public static String TICKETSFILE = "tickets.csv";
+public class Ticket extends Savable {
 
-    public int id;
+    public static ArrayList<Savable> instances = new ArrayList<>();
+    public final static String csvHeader = "id,passengerId,tripId";
+    public final static String savedPath = "tickets.csv";
+    public final static String className = "Ticket";    
+
     public int passengerId;
     public int tripId;
     
     public Ticket(int passengerId, int tripId) {
-        if (tickets.size() == 0) {
-            this.id = 1;
-        }
-        else {
-            this.id = tickets.getLast().id + 1;
-        }
+        this.id = generateId(Ticket.instances);
         this.passengerId = passengerId;
         this.tripId = tripId;
 
-        tickets.add(this);
+        Ticket.instances.add(this);
     }
+
     public Ticket(int id, int passengerId, int tripId) {
         this.id = id;
         this.passengerId = passengerId;
         this.tripId = tripId;
 
-        tickets.add(this);
+        Ticket.instances.add(this);
     }
-
-    public static void getTickets() {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(TICKETSFILE));
-            String line;
-            bufferedReader.readLine();
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] ticketData = line.split(",");
-
-                new Ticket(Integer.parseInt(ticketData[0]), Integer.parseInt(ticketData[1]),
-                        Integer.parseInt(ticketData[2]));
-            }
-        } catch (FileNotFoundException e) {
-            saveTickets();
-            getTickets();
-        } catch (IOException e) {
-            System.out.println("An error occured while getting stored trips");
-            e.printStackTrace();
-        }
-    }
-
-    public void addTicket() {
-        Common.writeToFile(TICKETSFILE, toCsv());
-    }
-
+    
+    @Override
     public String toCsv() {
-        return this.id + "," + this.passengerId + "," + this.tripId;
-    }
-
-    public String toString() {
-        Trip trip;
-
-        for (short i = 0; i < Trip.trips.size(); i++) {
-            trip = Trip.trips.get(i);
-            if (trip.id == this.tripId) {
-                return trip.toString("Ticket ID: " + this.id + "\nPassenger ID" + this.passengerId + "\nTrip ID"
-                        + this.tripId + "\n\nTrip Info:\n---" + trip.info());
-            }
-        }
-        return "";
-    }
-
-    public static void removeTicket(int id) {
-        for (short i = 0; i < tickets.size(); i++) {
-            if (tickets.get(i).id == id) {
-                tickets.remove(i);
-                saveTickets();
-                System.out.println("\n\nTicket with id " + id + " successfully deleted\n\n");
-            }
-        }
-
-    }
-    public static void saveTickets() {
-        Common._writeToFile(TICKETSFILE, CSVOPEN, false);
-
-        for (short i = 0; i < tickets.size(); i++) {
-            tickets.get(i).addTicket();
-        }
+        return this.id + "," + this.passengerId + "," + tripId;
     }
 
     public static void listTickets(int passengerId) {
-        for (short i = 0; i < tickets.size(); i++) {
-            Ticket ticket = tickets.get(i);
+        Ticket ticket;
+        for (short i = 0; i < instances.size(); i++) {
+            ticket = (Ticket) instances.get(i);
             if (ticket.passengerId == passengerId) {
                 System.out.println(ticket.toString());
             }
         }
     }
+    
+    public String toString() {
+        Trip trip;
+
+        for (short i = 0; i < Trip.instances.size(); i++) {
+            trip = (Trip) Trip.instances.get(i);
+            if (trip.id == this.tripId) {
+                return trip.toString("Ticket ID: " + this.id + "\nPassenger ID: " + this.passengerId + "\nTrip ID: "
+                        + this.tripId + "\n\nTrip Info:\n---\n" + trip.info());
+            }
+        }
+        return "";
+    }
+
+    public static void newInstance(String line) {
+        String[] data = line.split(",");
+
+        Ticket ticket = new Ticket(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
+                Integer.parseInt(data[2]));
+
+        
+        
+    }
+
+    public static void removeTicket(int id) {
+
+        for (short i = 0; i < instances.size(); i++) {
+            Ticket ticket = (Ticket) instances.get(i);
+            if (ticket.id == id) {
+                instances.remove(i);
+                saveInstances(Ticket.instances, Ticket.savedPath, Ticket.csvHeader);
+                Trip trip = (Trip) Trip.getById(ticket.tripId, Trip.instances);
+                trip.seats++;
+                saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
+                
+            }
+        }
+
+    }
+
+    public static void initiateClass() {
+        initiateClass(Ticket.savedPath, Ticket.csvHeader, Ticket.className, Ticket.instances);
+    }
+
+    
+    
 }
