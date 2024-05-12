@@ -18,7 +18,7 @@ public class Passenger extends User {
         Passenger.instances.add(this);
     }
     public Passenger() {
-        super(Passenger.instances, Passenger.savedPath);
+        super(Passenger.instances, Passenger.savedPath, Passenger.className);
         Passenger.instances.add(this);
     }
 

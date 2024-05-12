@@ -27,7 +27,7 @@ public class Driver extends User {
     }
 
     public Driver() {
-        super(Driver.instances, Driver.savedPath);
+        super(Driver.instances, Driver.savedPath, Driver.className);
         Driver.instances.add(this);
     }
 

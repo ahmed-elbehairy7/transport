@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import bts.Driver;
+import bts.Savable;
 import bts.Trip;
+import bts.Validations;
 import bts.Vehicle;
 
 public class Manager extends User {
@@ -19,7 +21,7 @@ public class Manager extends User {
         Manager.instances.add(this);
     }
     public Manager() {
-        super(Manager.instances, Manager.savedPath);
+        super(Manager.instances, Manager.savedPath, Manager.className);
         Manager.instances.add(this);
     }
 
@@ -77,8 +79,8 @@ public class Manager extends User {
 
     public void addEmployee(Scanner scanner) {
         String Name = getData(scanner, "Name: ");
-        String Email = getData(scanner, "Email: ");
-        String Username = getData(scanner, "Username: ");
+        String Email = _getData(scanner, "Email: ", "email");
+        String Username = _getData(scanner, "Username: ", "duser");
         new Driver(Name, Username, "initial", Email);
         saveInstances(Driver.instances, Driver.savedPath, Driver.csvHeader);
     }
@@ -86,7 +88,7 @@ public class Manager extends User {
     public void addVehicle(Scanner scanner) {
         
         String Type = getData(scanner, "Type: ");
-        int Capacity = Integer.parseInt(_getData(scanner, "Capacity: ", 1));
+        int Capacity = Integer.parseInt(_getData(scanner, "Capacity: ", "int"));
         String LicensePlate = getData(scanner, "License Plate: ");
 
         Vehicle vehicle = new Vehicle(Type, Capacity, LicensePlate);
@@ -97,12 +99,12 @@ public class Manager extends User {
 
         String source = getData(scanner, "Source: ");
         String Destination = getData(scanner, "Destination: ");
-        String Type = getData(scanner, "Type: ");
-        String Stops = _getData(scanner, "Stops: ", 1);
-        String Seats = _getData(scanner, "Seats: ", 1);
-        String Price = _getData(scanner, "Price: ", 1);
-        String DriverId = _getData(scanner, "DriverId: ", 1);
-        String cycle = getData(scanner, "Cycle: ");
+        String Type = _getData(scanner, "Type: ", "tType");
+        String Stops = _getData(scanner, "Stops: ", "int");
+        String Seats = _getData(scanner, "Seats: ", "int");
+        String Price = _getData(scanner, "Price: ", "int");
+        String DriverId = _getData(scanner, "DriverId: ", "int");
+        String cycle = _getData(scanner, "Cycle: ", "cycle");
 
 
         Trip trip = new Trip(Type, source, Destination, Integer.parseInt(Stops), Integer.parseInt(Seats), Integer.parseInt(Price), Integer.parseInt(DriverId), cycle);

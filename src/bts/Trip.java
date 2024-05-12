@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import bts.Savable;
+import bts.Validations;
 
 public class Trip extends Savable {
 
@@ -82,7 +83,7 @@ public class Trip extends Savable {
         System.out.println("Please press enter to view list of available drivers");
         scanner.nextLine();
         Driver.listDrivers();
-        this.driverId = Integer.parseInt(_getData(scanner, "\n\nNew Driver Id: ", 1));
+        this.driverId = Integer.parseInt(_getData(scanner, "\nNew Driver Id: ", "int"));
         saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
 
     }
@@ -103,19 +104,19 @@ public class Trip extends Savable {
                     this.destination = getData(scanner, prompt);
                     break;
                 case "2":
-                    this.type = getData(scanner, prompt);
+                    this.type = _getData(scanner, prompt, "tType");
                     break;
                 case "3":
-                    this.stops = Integer.parseInt(_getData(scanner, prompt, 1));
+                    this.stops = Integer.parseInt(_getData(scanner, prompt, "int"));
                     break;
                 case "4":
-                    this.seats = Integer.parseInt(_getData(scanner, prompt, 1));
+                    this.seats = Integer.parseInt(_getData(scanner, prompt, "int"));
                     break;
                 case "5":
-                    this.price = Integer.parseInt(_getData(scanner, prompt, 1));
+                    this.price = Integer.parseInt(_getData(scanner, prompt, "int"));
                     break;
                 case "6":
-                    this.driverId = Integer.parseInt(_getData(scanner, prompt, 1));
+                    this.driverId = Integer.parseInt(_getData(scanner, prompt, "int"));
                     break;
                 case "S":
                     saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);

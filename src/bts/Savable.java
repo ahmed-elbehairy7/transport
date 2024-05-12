@@ -9,11 +9,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.regex.Pattern;
 
 import bts.Driver;
 import bts.Passenger;
 import bts.Ticket;
 import bts.Trip;
+import bts.Validations;
 import bts.Vehicle;
 
 public class Savable {
@@ -174,17 +179,18 @@ public class Savable {
 
     }
 
-    public static String _getData(Scanner scanner, String prompt, int length) {
+    public static String _getData(Scanner scanner, String prompt, String type) {
+
         String data;
         do {
             System.out.print(prompt);
             data = scanner.nextLine();
-        } while (data.length() < length);
+        } while (!Validations.valid(data, type));
         return data;
     }
 
     public static String getData(Scanner scanner, String prompt) {
-        return _getData(scanner, prompt, 4);
+        return _getData(scanner, prompt, "string");
     }
 
 }

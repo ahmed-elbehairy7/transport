@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import bts.Savable;
 import bts.Ticket;
@@ -35,7 +37,7 @@ public class User extends Savable{
 
     }
 
-    public User(ArrayList<Savable> instances, String savedPath) {
+    public User(ArrayList<Savable> instances, String savedPath, String className) {
         //Initialize the scanner
         Scanner scanner = new Scanner(System.in);
         
@@ -45,7 +47,7 @@ public class User extends Savable{
         // Get what the user choose
         switch (scanner.nextLine()) {
             case "r":
-                register(instances, savedPath);
+                register(instances, savedPath, className);
                 break;
             default:
                 login(instances);
@@ -62,14 +64,29 @@ public class User extends Savable{
         Ticket.initiateClass();
     }
 
-    public void register(ArrayList<Savable> instances, String savedPath) {
+    public void register(ArrayList<Savable> instances, String savedPath, String className) {
 
         Scanner scanner = new Scanner(System.in);
 
+        String t;
+        switch (className) {
+            case Passenger.className:
+                t = "puser";
+                break;
+            case Manager.className:
+                t = "muser";
+                break;
+            case Driver.className:
+                t = "duser";
+            default:
+                t = "user";
+                break;
+        }
+
         this.name = getData(scanner, "Enter your name: ");
-        this.Email = getData(scanner, "Enter your email: ");
-        this.username = getData(scanner, "Enter your username: ");
-        this.password = getData(scanner, "Enter your password: ");
+        this.Email = _getData(scanner, "Enter your email: ", "email");
+        this.username = _getData(scanner, "Enter your username: ", t);
+        this.password = _getData(scanner, "Enter your password: ", "pass");
         this.id = generateId(instances);
 
         writeInstance(savedPath);
@@ -87,7 +104,7 @@ public class User extends Savable{
         Scanner scanner = new Scanner(System.in);
 
         String username = getData(scanner, "Enter your username: ");
-        String password = getData(scanner, "Enter your password: ");
+        String password = _getData(scanner, "Enter your password: ", "pass");
 
         User user;
         for (short i = 0; i < instances.size(); i++) {
