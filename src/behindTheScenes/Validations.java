@@ -9,6 +9,8 @@ public class Validations {
         switch (type) {
             case "string":
                 return validString(text);
+            case "name":
+                return validName(text);
             case "email":
                 return validEmail(text);
             case "pass":
@@ -56,6 +58,10 @@ public class Validations {
             }
         }
         return true;
+    }
+
+    private static boolean validName(String text) {
+        return text.length() > 2;
     }
 
     private static boolean validString(String text) {

@@ -64,7 +64,7 @@ public class UserCli {
                 break;
         }
 
-        this.name = Savable.getData(scanner, "Enter your name: ");
+        this.name = Savable._getData(scanner, "Enter your name: ", "name");
         this.Email = Savable._getData(scanner, "Enter your email: ", "email");
         this.username = Savable._getData(scanner, "Enter your username: ", t);
         this.password = Savable._getData(scanner, "Enter your password: ", "pass");

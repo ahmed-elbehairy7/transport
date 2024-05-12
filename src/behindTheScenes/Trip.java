@@ -36,6 +36,7 @@ public class Trip extends Savable {
     
     public Trip(int id, String type, String source, String destination, int stops, int seats, int price, int driverId, String cycle) {
         super();
+        this.index = instances.size();
         this.id = id;
         this.type = type;
         this.source = source;
@@ -128,7 +129,7 @@ public class Trip extends Savable {
     }
 
     public String info() {
-        return "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
+        return "Index: " + this.index + "\nID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
                 + this.stops + "\nCycle: " + this.cycle;
     }
     

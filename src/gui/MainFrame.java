@@ -13,11 +13,14 @@ public class MainFrame extends Frame{
 
         setLayout(new GridLayout(3, 1));
 
+        Passenger.initiateClass();
+        Manager.initiateClass();
+        Driver.initiateClass();
+
         //Passenger button
         Button PassengerButton = new Button(Passenger.className);
         PassengerButton.addActionListener(e -> {
             dispose();
-            Passenger.initiateClass();
             new Login(Passenger.className);
         });
         add(PassengerButton);
@@ -26,7 +29,6 @@ public class MainFrame extends Frame{
         Button ManagerButton = new Button(Manager.className);
         ManagerButton.addActionListener(e -> {
             dispose();
-            Manager.initiateClass();
             new Login(Manager.className);
         });
         add(ManagerButton);
@@ -35,7 +37,6 @@ public class MainFrame extends Frame{
         Button DriverButton = new Button(Driver.className);
         DriverButton.addActionListener(e -> {
             dispose();
-            Driver.initiateClass();
             new Login(Driver.className);
         });
         add(DriverButton);

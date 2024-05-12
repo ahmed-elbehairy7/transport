@@ -33,14 +33,21 @@ public class Ticket extends Savable {
         return this.id + "," + this.passengerId + "," + tripId;
     }
 
-    public static void listTickets(int passengerId) {
+    public static String _listTickets(int passengerId) {
+        String text = "";
         Ticket ticket;
         for (short i = 0; i < instances.size(); i++) {
             ticket = (Ticket) instances.get(i);
             if (ticket.passengerId == passengerId) {
-                System.out.println(ticket.toString());
+                text +=  ticket.toString() + "\n";
             }
         }
+
+        return text;
+    }
+
+    public static void listTickets(int passengerId) {
+        System.out.println(_listTickets(passengerId));
     }
     
     public String toString() {

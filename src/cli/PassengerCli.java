@@ -108,7 +108,7 @@ public class PassengerCli extends UserCli {
         When the passenger books a ticket (if there are available seats) he is shown a price for the selected ticket(s) and then proceeds to buy them.
         */
 
-        System.out.println("Book a ticket? (Y/N)  ");
+        System.out.println("Book the ticket? (Y/N)  ");
 
         switch (scanner.nextLine().toUpperCase()) {
             case "Y":
@@ -124,12 +124,4 @@ public class PassengerCli extends UserCli {
 
     }
     
-    public static void initiateClass() {
-        initiateClass(Passenger.savedPath, Passenger.className, Ticket.instances);
-    }
-
-    public static void newInstance(String line) {
-        String data[] = line.split(",");
-        new Passenger(Integer.parseInt(data[0]), data[1], data[3], data[4], data[2]);
-    }
 }

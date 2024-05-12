@@ -71,12 +71,12 @@ public class Register extends Frame {
 
     private void signUp() {
         
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String email = emailField.getText();
-        String name = nameField.getText();
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText().trim();
+        String email = emailField.getText().trim();
+        String name = nameField.getText().trim();
 
-        if (!(Validations.valid(password, "pass") && Validations.valid(email, "email") && Validations.valid(name, "string"))) {
+        if (!(Validations.valid(password, "pass") && Validations.valid(email, "email") && Validations.valid(name, "name"))) {
             return;
         }
 
@@ -112,15 +112,15 @@ public class Register extends Frame {
         switch (className) {
             case Passenger.className:
                 dispose();
-                new PassengerGui();
+                new PassengerGui(user);
                 break;
             case Manager.className:
                 dispose();
-                new ManagerGui();
+                new ManagerGui(user);
                 break;
             case Driver.className:
                 dispose();
-                new DriverGui();
+                new DriverGui(user);
                 break;
         }
         

@@ -1,6 +1,5 @@
 package behindTheScenes;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -9,17 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-
-import behindTheScenes.Driver;
-import behindTheScenes.Passenger;
-import behindTheScenes.Ticket;
-import behindTheScenes.Trip;
-import behindTheScenes.Validations;
-import behindTheScenes.Vehicle;
 
 public class Savable {
 
@@ -31,7 +19,7 @@ public class Savable {
     public final static String nDriver = "Driver";
 
     
-
+    public int index;
     public int id;
 
     public Savable() {
@@ -152,10 +140,16 @@ public class Savable {
         }
     }
 
-    public static void listInstances(ArrayList<Savable> instances) {
+    public static String _listInstances(ArrayList<Savable> instances) {
+        String text = "";
         for (short i = 0; i < instances.size(); i++) {
-            System.out.println(instances.get(i).toString());
+            text += (instances.get(i).toString()) + "\n";
         }
+        return text;
+    }
+
+    public static void listInstances(ArrayList<Savable> instances) {
+        System.out.println(_listInstances(instances));
     }
 
     public static boolean writeToFile(String fileName, String data) {
@@ -184,7 +178,7 @@ public class Savable {
         String data;
         do {
             System.out.print(prompt);
-            data = scanner.nextLine();
+            data = scanner.nextLine().trim();
         } while (!Validations.valid(data, type));
         return data;
     }

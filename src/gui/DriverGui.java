@@ -11,12 +11,12 @@ import behindTheScenes.Ticket;
 import behindTheScenes.Trip;
 import behindTheScenes.User;
 
-public class PassengerGui extends UserGui {
+public class DriverGui extends UserGui {
     private Button BookATicketButton, listTicketsButton, removeTicketButton;
     private TextArea outputArea;
 
-    public PassengerGui(User passenger) {
-        super("Passenger", passenger);
+    public DriverGui(User Driver) {
+        super("Driver", Driver);
         setLayout(new BorderLayout());
 
         JPanel buttonPanel = new JPanel();
@@ -65,7 +65,7 @@ public class PassengerGui extends UserGui {
         outputArea.append(trip.toString(trip.allInfo()));
 
         /*
-        When the passenger books a ticket (if there are available seats) he is shown a price for the selected ticket(s) and then proceeds to buy them.
+        When the Driver books a ticket (if there are available seats) he is shown a price for the selected ticket(s) and then proceeds to buy them.
         */
 
         if (JOptionPane.showConfirmDialog(this, "book the ticket?") == 0) {

@@ -55,8 +55,8 @@ public class Login extends Frame {
 
     private void signIn() {
         
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText().trim();
 
         if (!(Validations.valid(username, "string") && Validations.valid(password, "pass"))) {
             return;
@@ -85,15 +85,15 @@ public class Login extends Frame {
         switch (className) {
             case Passenger.className:
                 dispose();
-                new PassengerGui();
+                new PassengerGui(user);
                 break;
             case Manager.className:
                 dispose();
-                new ManagerGui();
+                new ManagerGui(user);
                 break;
             case Driver.className:
                 dispose();
-                new DriverGui();
+                new DriverGui(user);
                 break;
         }
         
