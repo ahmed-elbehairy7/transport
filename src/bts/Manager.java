@@ -21,7 +21,7 @@ public class Manager extends User {
         while (true) {
 
             System.out.println(
-                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\nAnything else to exit\n\n");
+                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\n(Q) Quit\n\n");
 
             switch (scanner.nextLine().toUpperCase()) {
                 case "L":
@@ -36,8 +36,9 @@ public class Manager extends User {
                     break;
                 case "E":
                     editTrip(scanner);
-                default:
+                case "Q":
                     return;
+                default:
                     break;
             }
 
@@ -55,7 +56,7 @@ public class Manager extends User {
         String Price = Common._getData(scanner, "Price: ", 1);
         String Driver = Common.getData(scanner, "Driver: ");
 
-        Trip trip = new Trip(Trip.trips.getLast().id + 1, Type, source, Destination, Integer.parseInt(Stops),
+        Trip trip = new Trip(Type, source, Destination, Integer.parseInt(Stops),
                 Integer.parseInt(Seats), Integer.parseInt(Price), Driver);
 
         trip.addTrip();

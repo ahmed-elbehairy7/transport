@@ -7,7 +7,7 @@ import bts.Common;
 
 public class Trip {
 
-    public static String CSVOPEN = "id,type,source,destination,stops,seats,price";
+    public static String CSVOPEN = "id,type,source,destination,stops,seats,price,driver";
     public static String TRIPSFILE = "trips.csv";
     public static ArrayList<Trip> trips = new ArrayList<Trip>();
 
@@ -19,6 +19,26 @@ public class Trip {
     public int price;
     public int id;
     public String driver;
+
+    public Trip(String type, String source, String destination, int stops, int seats, int price, String driver) {
+
+        if (trips.size() == 0) {
+            this.id = 1;
+        }
+        else {
+            this.id = trips.getLast().id + 1;
+        }
+        this.type = type;
+        this.source = source;
+        this.destination = destination;
+        this.stops = stops;
+        this.seats = seats;
+        this.price = price;
+        this.driver = driver;
+
+        trips.add(this);
+
+    }
 
     public Trip(int id, String type, String source, String destination, int stops, int seats, int price, String driver) {
 
@@ -56,8 +76,7 @@ public class Trip {
     }
 
     public void addTrip() {
-        String tripData = toCsv();
-        Common.writeToFile(TRIPSFILE, tripData);
+        Common.writeToFile(TRIPSFILE, toCsv());
     }
     
     public String toCsv() {
@@ -84,6 +103,7 @@ public class Trip {
             if (trips.get(i).id == id) {
                 trips.remove(i);
                 Trip.saveTrips();
+                System.out.println("\n\nTrip with id " + id + " successfully deleted\n\n");
             }
         }
 
@@ -94,7 +114,7 @@ public class Trip {
         String prompt = "\nNew Value: ";
         while (true) {
             System.out.println(
-                    "Please choose what to edit:\n\n(0) Source\n(1) Destination\n(2) Type\n(3) Stops\n(4) Seats\n(5) Price\n(6) Driver\nanything else to exit\n\n");
+                    "Please choose what to edit:\n\n(0) Source\n(1) Destination\n(2) Type\n(3) Stops\n(4) Seats\n(5) Price\n(6) Driver\n(S) Save and exit\n(Q) Quit without saving\n\n");
 
             switch (scanner.nextLine()) {
                 case "0":
@@ -118,9 +138,13 @@ public class Trip {
                 case "6":
                     this.source = Common.getData(scanner, prompt);
                     break;
-                default:
+                case "S":
                     saveTrips();
                     return;
+                case "Q":
+                    return;
+                default:
+                    break;
             }
         }
     }

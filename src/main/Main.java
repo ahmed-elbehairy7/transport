@@ -2,7 +2,9 @@ import java.util.Scanner;
 
 import javax.swing.text.Style;
 
-import bts.*;
+import bts.Passenger;
+import bts.Manager;
+import bts.Driver;
 
 public class Main {
     public static void main(String[] args)  {

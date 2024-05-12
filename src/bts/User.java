@@ -1,6 +1,7 @@
 package bts;
 
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -13,10 +14,12 @@ import java.io.BufferedReader;
 
 
 public class User {
+    public static String CSVHEADER = "id,Name,Email,username,password";
     public static String USERSFILE = "users.csv"; 
     public static String TYPES[]=
-    {"passenger", "manager", "driver"};
+            { "passenger", "manager", "driver" };
 
+    public int id;
     public String name;
     public String username;
     public String password;
@@ -61,10 +64,29 @@ public class User {
         this.password = Common.getData(scanner, "Enter your password: ");
 
         String userData = this.name + "," + this.Email + "," + this.username + "," + this.password;
-        if (Common.writeToFile(USERSFILE, userData)) {
-            System.out.println("\nyour Registration successful.\n");
-            this.success = true;
+
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader(USERSFILE));
+            String temp = br.readLine();
+            String line;
+            
+            do {
+                line = temp;
+            } while ((temp = br.readLine()) != null);
+
+            this.id = Integer.parseInt(line.split(",")[0]) + 1;
+            
+        } catch (FileNotFoundException e) {
+            Common.writeToFile(USERSFILE, CSVHEADER);
+            Common.writeToFile(USERSFILE, "1," + userData);
         }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.exit(2);
+        }
+        System.out.println("\nyour Registration successful.\n");
+        this.success = true;
     }
 
     public boolean login() {
@@ -78,11 +100,12 @@ public class User {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] userData = line.split(",");
-                if (userData.length >= 4 && userData[2].equals(username) && userData[3].equals(password)) {
-                    this.name = userData[0];
-                    this.Email = userData[1];
-                    this.username = userData[2];
-                    this.password = userData[3];
+                if (userData.length == 5 && userData[3].equals(username) && userData[4].equals(password)) {
+                    this.id = Integer.parseInt(userData[0]);
+                    this.name = userData[1];
+                    this.Email = userData[2];
+                    this.username = userData[3];
+                    this.password = userData[4];
                     this.success = true;
                     System.out.println("\n\n\nWelcome " + this.type + "!\n\n");
                     return true;
