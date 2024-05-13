@@ -31,6 +31,7 @@ public class Ticket extends Savable {
     public String toCsv() {
         return this.id + "," + this.passengerId + "," + tripId;
     }
+
     public String toString() {
         Trip trip;
 
@@ -62,14 +63,11 @@ public class Ticket extends Savable {
     }
     
 
-    public static void newInstance(String line) {
-        String[] data = line.split(",");
+    public static void newInstance(String[] data) {
 
         new Ticket(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]));
 
-        
-        
     }
 
     public static void removeTicket(int id) {

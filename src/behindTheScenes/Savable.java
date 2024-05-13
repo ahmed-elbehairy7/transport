@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Savable {
 
@@ -36,6 +35,7 @@ public class Savable {
     public void writeInstance(String savedPath) {
         writeToFile(savedPath, toCsv());
     }
+
 
     public static int generateId(ArrayList<Savable> instances) {
         if (instances.size() == 0) {
@@ -101,6 +101,7 @@ public class Savable {
             String line;
             bufferedReader.readLine();
             while ((line = bufferedReader.readLine()) != null) {
+
                 newInstance(line, className);
             }
             bufferedReader.close();
@@ -146,40 +147,26 @@ public class Savable {
 
     }
 
-    public static String _getData(Scanner scanner, String prompt, String type) {
-
-        String data;
-        do {
-            System.out.print(prompt);
-            data = scanner.nextLine().trim();
-        } while (!Validations.valid(data, type));
-        return data;
-    }
-
-    public static String getData(Scanner scanner, String prompt) {
-        return _getData(scanner, prompt, "string");
-    }
-
-
     private static void newInstance(String line, String className) {
+        String[] data = line.split(",");
         switch (className) {
             case nTrip:
-                Trip.newInstance(line);
+                Trip.newInstance(data);
                 break;
             case nTicket:
-                Ticket.newInstance(line);
+                Ticket.newInstance(data);
                 break;
             case nVehicle:
-                Vehicle.newInstance(line);
+                Vehicle.newInstance(data);
                 break;
             case nPassenger:
-                Passenger.newInstance(line);
+                Passenger.newInstance(data);
                 break;
             case nManager:
-                Manager.newInstance(line);
+                Manager.newInstance(data);
                 break;
             case nDriver:
-                Driver.newInstance(line);
+                Driver.newInstance(data);
                 break;
         
             default:

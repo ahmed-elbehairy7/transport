@@ -1,71 +1,36 @@
 package gui.frames;
 
-import java.awt.GridLayout;
-import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+
 import javax.swing.JTextField;
 
 import behindTheScenes.Driver;
 import behindTheScenes.Manager;
 import behindTheScenes.Passenger;
 import behindTheScenes.User;
-import behindTheScenes.Validations;
-import gui.components.Button;
-import gui.components.Frame;
-import gui.components.Label;
-import gui.components.P1;
-import gui.components.TextField;
+import gui.UserRegisteration;
 
-public class Login extends Frame {
-
-    private TextField usernameField;
-    private JTextField passwordField;
-    private String className;
+public class Login extends UserRegisteration {
 
     public Login(String text) {
         super("Login");
         className = text;
 
-        setLayout(new GridLayout(3, 2));
-
-        //username label
-        Label usernameLabel = new Label("Username:");
-        add(usernameLabel);
-
-        //username field
-        usernameField = new TextField();
-        add(usernameField);
-
-        // Password label
-        Label passwordLabel = new Label("Password:");
-        add(passwordLabel);
-
-        //Password field
-        passwordField = new JPasswordField();
-        passwordField.setFont(new P1());
-        add(passwordField);
-
-        //Sign in button
-        Button signInButton = new Button("Sign In");
-        signInButton.addActionListener(e -> signIn());
-        add(signInButton);
-
-        //Sign up button
-        Button signUp = new Button("New user? sign up?");
-        signUp.addActionListener(e -> {
+        String[] labels = {};
+        JTextField[] textFields = {};
+        String[] buttonsText = { "Sign in", "New? Sign Up?" };
+        ActionListener[] actionListeners = { e -> signIn(), e -> {
             dispose();
             new Register(className);
-        });
-        add(signUp);
+        } };
+
+        generateUi(labels, textFields, buttonsText, actionListeners);
     }
 
     private void signIn() {
         
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
-
-        if (!(Validations.valid(username, "string") && Validations.valid(password, "pass"))) {
-            return;
-        }
 
         User user;
         switch (className) {

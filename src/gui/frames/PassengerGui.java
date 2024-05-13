@@ -1,50 +1,22 @@
 package gui.frames;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import behindTheScenes.Ticket;
 import behindTheScenes.Trip;
 import behindTheScenes.User;
-import gui.components.Button;
-import gui.components.TextArea;
 
 public class PassengerGui extends UserGui {
-    private Button BookATicketButton, listTicketsButton, removeTicketButton;
-    private TextArea outputArea;
 
     public PassengerGui(User passenger) {
         super("Passenger", passenger);
-        setLayout(new BorderLayout());
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3, 1));
+        String[] buttonsText = { "Book A Ticket", "List Tickets", "Remove A Ticket" };
+        ActionListener[] functions = { e -> bookATicket(), e -> listTickets(), e -> removeTicket() };
 
-        //Book a ticket
-        BookATicketButton = new Button("Book a ticket");
-        BookATicketButton.addActionListener(e -> bookATicket());
-        buttonPanel.add(BookATicketButton);
-
-        //List tickets
-        listTicketsButton = new Button("List tickets");
-        listTicketsButton.addActionListener(e -> listTickets());
-        buttonPanel.add(listTicketsButton);
-
-        //Remove a ticket
-        removeTicketButton = new Button("Remove a ticket");
-        removeTicketButton.addActionListener(e -> removeTicket());
-        buttonPanel.add(removeTicketButton);
-
-
-        add(buttonPanel, BorderLayout.WEST);
-
-        outputArea = new TextArea();
-        JScrollPane scrollPane = new JScrollPane(outputArea);
-        add(scrollPane, BorderLayout.CENTER);
+        generateUi(buttonsText, functions);
         
     }
 

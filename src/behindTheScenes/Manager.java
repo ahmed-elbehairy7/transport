@@ -17,8 +17,8 @@ public class Manager extends User {
         initiateClass(Manager.savedPath, Manager.className, Manager.instances);
     }
 
-    public static void newInstance(String line) {
-        String data[] = line.split(",");
+    public static void newInstance(String[] data) {
+        
         new Manager(Integer.parseInt(data[0]), data[1], data[3], data[4], data[2]);
     }
     

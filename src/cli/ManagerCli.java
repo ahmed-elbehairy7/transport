@@ -3,6 +3,8 @@ package cli;
 import java.util.Scanner;
 
 import behindTheScenes.*;
+import data.InputData;
+import data.Validations;
 
 public class ManagerCli extends UserCli {
 
@@ -64,19 +66,19 @@ public class ManagerCli extends UserCli {
     }
 
     public void addEmployee(Scanner scanner) {
-        String Name = Savable.getData(scanner, "Name: ");
-        String Email = Savable._getData(scanner, "Email: ", "email");
-        String Username = Savable._getData(scanner, "Username: ", "duser");
-        String password = Savable._getData(scanner, "password: ", "pass");
+        String Name = InputData.cli(scanner, "Name: ");
+        String Email = InputData.cli(scanner, "Email: ", e -> Validations.validEmail(e));
+        String Username = InputData.cli(scanner, "Username: ", e -> Validations.validUsername(e, Driver.instances));
+        String password = InputData.cli(scanner, "password: ", e -> Validations.validPass(e));
         new Driver(Name, Username, password, Email);
         Driver.saveInstances(Driver.instances, Driver.savedPath, Driver.csvHeader);
     }
 
     public void addVehicle(Scanner scanner) {
         
-        String Type = Savable.getData(scanner, "Type: ");
-        int Capacity = Integer.parseInt(Savable._getData(scanner, "Capacity: ", "int"));
-        String LicensePlate = Savable._getData(scanner, "License Plate: ", "name");
+        String Type = InputData.cli(scanner, "Type: ");
+        int Capacity = Integer.parseInt(InputData.cli(scanner, "Capacity: ", e -> Validations.validInt(e)));
+        String LicensePlate = InputData.cli(scanner, "License Plate: ", e -> Validations.validName(e));
 
         new Vehicle(Type, Capacity, LicensePlate);
         Vehicle.saveInstances(Vehicle.instances, Vehicle.savedPath, Vehicle.csvHeader);
@@ -84,14 +86,14 @@ public class ManagerCli extends UserCli {
 
     public void addTrip(Scanner scanner) {
 
-        String source = Savable.getData(scanner, "Source: ");
-        String Destination = Savable.getData(scanner, "Destination: ");
-        String Type = Savable._getData(scanner, "Type: ", "tType");
-        String Stops = Savable._getData(scanner, "Stops: ", "int");
-        String Seats = Savable._getData(scanner, "Seats: ", "int");
-        String Price = Savable._getData(scanner, "Price: ", "int");
-        String DriverId = Savable._getData(scanner, "DriverId: ", "int");
-        String cycle = Savable._getData(scanner, "Cycle: ", "cycle");
+        String source = InputData.cli(scanner, "Source: ");
+        String Destination = InputData.cli(scanner, "Destination: ");
+        String Type = InputData.cli(scanner, "Type: ", e -> Validations.validTripType(e));
+        String Stops = InputData.cli(scanner, "Stops: ", e -> Validations.validInt(e));
+        String Seats = InputData.cli(scanner, "Seats: ", e -> Validations.validInt(e));
+        String Price = InputData.cli(scanner, "Price: ", e -> Validations.validInt(e));
+        String DriverId = InputData.cli(scanner, "DriverId: ", e -> Validations.validInt(e));
+        String cycle = InputData.cli(scanner, "Cycle: ", e -> Validations.validCycle(e));
 
 
         Trip trip = new Trip(Type, source, Destination, Integer.parseInt(Stops), Integer.parseInt(Seats), Integer.parseInt(Price), Integer.parseInt(DriverId), cycle);
@@ -132,8 +134,8 @@ public class ManagerCli extends UserCli {
         initiateClass(Manager.savedPath, Manager.className, Manager.instances);
     }
 
-    public static void newInstance(String line) {
-        String data[] = line.split(",");
+    public static void newInstance(String[] data) {
+        
         new Manager(Integer.parseInt(data[0]), data[1], data[3], data[4], data[2]);
     }
     

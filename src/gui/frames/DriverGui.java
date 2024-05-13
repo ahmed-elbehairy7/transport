@@ -1,42 +1,19 @@
 package gui.frames;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
 
 import behindTheScenes.Trip;
 import behindTheScenes.User;
-import gui.components.Button;
-import gui.components.TextArea;
 
 public class DriverGui extends UserGui {
-    private Button personalInfoButton, listAssignedTripsButton;
-    private TextArea outputArea;
 
     public DriverGui(User Driver) {
         super("Driver", Driver);
-        setLayout(new BorderLayout());
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2, 1));
+        String[] buttonsText = {"Personal Info", "List Assigned Trips"};
+        ActionListener[] functions = {e -> personalInfo(), e -> listAssignedTrips()};
 
-        //Personal info
-        personalInfoButton = new Button("Personl info");
-        personalInfoButton.addActionListener(e -> personalInfo());
-        buttonPanel.add(personalInfoButton);
-
-        //List assigned trips
-        listAssignedTripsButton = new Button("List assigned trips");
-        listAssignedTripsButton.addActionListener(e -> listAssignedTrips());
-        buttonPanel.add(listAssignedTripsButton);
-
-        add(buttonPanel, BorderLayout.WEST);
-
-        outputArea = new TextArea();
-        JScrollPane scrollPane = new JScrollPane(outputArea);
-        add(scrollPane, BorderLayout.CENTER);
+        generateUi(buttonsText, functions);
 
     }
     

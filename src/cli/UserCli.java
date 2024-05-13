@@ -5,6 +5,8 @@ import java.util.Scanner;
 import java.lang.System;
 
 import behindTheScenes.*;
+import data.*;
+import functions.booleanFunction;
 
 
 public class UserCli {
@@ -49,25 +51,22 @@ public class UserCli {
 
         Scanner scanner = new Scanner(System.in);
 
-        String t;
+        booleanFunction t;
         switch (className) {
             case Passenger.className:
-                t = "puser";
+                t = e -> Validations.validUsername(e, Passenger.instances);
                 break;
             case Manager.className:
-                t = "muser";
+                t = e -> Validations.validUsername(e, Manager.instances);
                 break;
             case Driver.className:
-                t = "duser";
-            default:
-                t = "user";
-                break;
+                t = e -> Validations.validUsername(e, Driver.instances);
         }
 
-        this.name = Savable._getData(scanner, "Enter your name: ", "name");
-        this.Email = Savable._getData(scanner, "Enter your email: ", "email");
-        this.username = Savable._getData(scanner, "Enter your username: ", t);
-        this.password = Savable._getData(scanner, "Enter your password: ", "pass");
+        this.name = InputData.cli(scanner, "Enter your name: ", e -> Validations.validName(e));
+        this.Email = InputData.cli(scanner, "Enter your email: ", e -> Validations.validEmail(e));
+        this.username = InputData.cli(scanner, "Enter your username: ", t);
+        this.password = InputData.cli(scanner, "Enter your password: ", e -> Validations.validPass(e));
 
         User user = User.register(name, Email, username, password, instances, savedPath, className);
         this.id = user.id;
@@ -83,8 +82,8 @@ public class UserCli {
 
         Scanner scanner = new Scanner(System.in);
 
-        String username = Savable.getData(scanner, "Enter your username: ");
-        String password = Savable._getData(scanner, "Enter your password: ", "pass");
+        String username = InputData.cli(scanner, "Enter your username: ");
+        String password = InputData.cli(scanner, "Enter your password: ", e -> Validations.validPass(e));
 
         User user = User.login(username, password, instances);
         if (!user.success) {

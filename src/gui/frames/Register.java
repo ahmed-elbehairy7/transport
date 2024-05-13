@@ -1,6 +1,8 @@
 package gui.frames;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -8,70 +10,30 @@ import behindTheScenes.Driver;
 import behindTheScenes.Manager;
 import behindTheScenes.Passenger;
 import behindTheScenes.User;
-import behindTheScenes.Validations;
+import data.Validations;
+import gui.UserRegisteration;
 import gui.components.Button;
 import gui.components.Frame;
 import gui.components.Label;
 import gui.components.P1;
-import gui.components.TextField;
 
-public class Register extends Frame {
-
-    private TextField usernameField, nameField, emailField;
-    private JTextField passwordField;
-    private String className;
+public class Register extends UserRegisteration {
+    public JTextField emailField = new JTextField();
+    public JTextField nameField = new JTextField();
 
     public Register(String text) {
         super("Sign Up");
         className = text;
 
-        setLayout(new GridLayout(5, 2));
-
-        //name label
-        Label nameLabel = new Label("name:");
-        add(nameLabel);
-
-        //name field
-        nameField = new TextField();
-        add(nameField);
-
-        //username label
-        Label usernameLabel = new Label("Username:");
-        add(usernameLabel);
-
-        //username field
-        usernameField = new TextField();
-        add(usernameField);
-
-        //email label
-        Label emailLabel = new Label("email:");
-        add(emailLabel);
-
-        //email field
-        emailField = new TextField();
-        add(emailField);
-
-        // Password label
-        Label passwordLabel = new Label("Password:");
-        add(passwordLabel);
-
-        //Password field
-        passwordField = new JPasswordField();
-        passwordField.setFont(new P1());
-        add(passwordField);
-
-        //Sign in button
-        Button signUpButton = new Button("Sign Up");
-        signUpButton.addActionListener(e -> signUp());
-        add(signUpButton);
-
-        //Sign up button
-        Button LoginButton = new Button("Already have an account? Login?");
-        LoginButton.addActionListener(e -> {
+        String[] labels = {"name", "email"};
+        JTextField[] textFields = {nameField, emailField};
+        String[] buttonsText = { "Sign in", "New? Sign Up?" };
+        ActionListener[] actionListeners = { e -> signUp(), e -> {
             dispose();
             new Login(className);
-        });
-        add(LoginButton);
+        } };
+
+        generateUi(labels, textFields, buttonsText, actionListeners);
     }
 
     private void signUp() {
@@ -81,26 +43,26 @@ public class Register extends Frame {
         String email = emailField.getText().trim();
         String name = nameField.getText().trim();
 
-        if (!(Validations.valid(password, "pass") && Validations.valid(email, "email") && Validations.valid(name, "name"))) {
+        if (!(Validations.validPass(password)) && Validations.validEmail(email) && Validations.validName(name)) {
             return;
         }
 
         User user;
         switch (className) {
             case Passenger.className:
-                if (!Validations.valid(username, "puser")) {
+                if (!Validations.validUsername(username, Passenger.instances)) {
                     return;
                 }
                 user = Passenger.register(name, email, username, password, Passenger.instances, Passenger.savedPath, Passenger.className);
                 break;
             case Manager.className:
-            if (!Validations.valid(username, "muser")) {
+            if (!Validations.validUsername(username, Manager.instances)) {
                     return;
                 }
                 user = Manager.register(name, email, username, password, Manager.instances, Manager.savedPath, Manager.className);
                 break;
             case Driver.className:
-            if (!Validations.valid(username, "duser")) {
+            if (!Validations.validUsername(username, Driver.instances)) {
                     return;
                 }
                 user = Driver.register(name, email, username, password, Driver.instances, Driver.savedPath, Driver.className);

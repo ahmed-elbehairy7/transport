@@ -1,71 +1,27 @@
 package gui.frames;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import behindTheScenes.Driver;
 import behindTheScenes.Trip;
 import behindTheScenes.User;
 import behindTheScenes.Vehicle;
-import gui.Data;
-import gui.components.Button;
-import gui.components.TextArea;
+import data.InputData;
+import data.Validations;
 
 public class ManagerGui extends UserGui {
-    private Button ListTripsButton, addTripButton, removeTripButton, editTripButton, assignDriverButton, addVehicleButton, addEmployeeButton;
-    private TextArea outputArea;
 
     public ManagerGui(User Manager) {
         super("Manager", Manager);
-        setLayout(new BorderLayout());
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(7, 1));
+        String[] buttonsText = { "List Trips", "Add A Trip", "Remove A Trip", "Assign A Driver", "Add A Vehicle",
+                "Add An Employee" };
+        ActionListener[] functions = { e -> listTrips(), e -> addTrip(), e -> removeTrip(), e -> editTrip(),
+                e -> assignDriver(), e -> addVehicle(), e -> addEmployee() };
 
-        //List all trips
-        ListTripsButton = new Button("List trips");
-        ListTripsButton.addActionListener(e -> listTrips());
-        buttonPanel.add(ListTripsButton);
-
-        //Add a trip
-        addTripButton = new Button("Add a trip");
-        addTripButton.addActionListener(e -> addTrip());
-        buttonPanel.add(addTripButton);
-
-        //Remove a trip
-        removeTripButton = new Button("Remove a trip");
-        removeTripButton.addActionListener(e -> removeTrip());
-        buttonPanel.add(removeTripButton);
-
-        //edit a trip
-        editTripButton = new Button("Edit a trip");
-        editTripButton.addActionListener(e -> editTrip());
-        buttonPanel.add(editTripButton);
-
-        //Assign a driver
-        assignDriverButton = new Button("Assign a driver");
-        assignDriverButton.addActionListener(e -> assignDriver());
-        buttonPanel.add(assignDriverButton);
-
-        //add a vihecle
-        addVehicleButton = new Button("Add a vehicle");
-        addVehicleButton.addActionListener(e -> addVehicle());
-        buttonPanel.add(addVehicleButton);
-
-        //Add an employee
-        addEmployeeButton = new Button("Add an amployee");
-        addEmployeeButton.addActionListener(e -> addEmployee());
-        buttonPanel.add(addEmployeeButton);
-
-        add(buttonPanel, BorderLayout.WEST);
-
-        outputArea = new TextArea();
-        JScrollPane scrollPane = new JScrollPane(outputArea);
-        add(scrollPane, BorderLayout.CENTER);
+        generateUi(buttonsText, functions);
 
     }
     
@@ -75,14 +31,14 @@ public class ManagerGui extends UserGui {
     
     private void addTrip() {
 
-        String Type = Data.getDialog("Type: ", "tType");
-        String Source = Data.getDialog("Source: ", "string");
-        String Destination = Data.getDialog("Destination", "string");
-        String Stops = Data.getDialog("Stops: ", "int");
-        String Seats = Data.getDialog("Seats: ", "int");
-        String Price = Data.getDialog("Price", "int");
-        String DriverId = Data.getDialog("DriverId", "int");
-        String Cycle = Data.getDialog("Cycle", "cycle");
+        String Type = InputData.gui("Type: ", e -> Validations.validTripType(e));
+        String Source = InputData.gui("Source: ", e -> Validations.validString(e));
+        String Destination = InputData.gui("Destination", e -> Validations.validString(e));
+        String Stops = InputData.gui("Stops: ", e -> Validations.validInt(e));
+        String Seats = InputData.gui("Seats: ", e -> Validations.validInt(e));
+        String Price = InputData.gui("Price", e -> Validations.validInt(e));
+        String DriverId = InputData.gui("DriverId", e -> Validations.validInt(e));
+        String Cycle = InputData.gui("Cycle: ", e -> Validations.validCycle(e));
 
         new Trip(Type, Source, Destination, Integer.parseInt(Stops), Integer.parseInt(Seats), Integer.parseInt(Price), Integer.parseInt(DriverId), Cycle).writeInstance(Trip.savedPath);
     }
@@ -90,7 +46,7 @@ public class ManagerGui extends UserGui {
     private void removeTrip() {
         listTrips();
 
-        String id = Data.getDialog("Please type the id of the trip you want to remove: ", "int");
+        String id = InputData.gui("Please type the id of the trip you want to remove: ", e -> Validations.validInt(e));
 
         Trip.removeInstance(Integer.parseInt(id), Trip.instances, Trip.savedPath, Trip.csvHeader);
 
@@ -100,7 +56,7 @@ public class ManagerGui extends UserGui {
 
         listTrips();
 
-        int id = Integer.parseInt(Data.getDialog("Please type the id of the trip you want to edit: ", "int"));
+        int id = Integer.parseInt(InputData.gui("Please type the id of the trip you want to edit: ", e -> Validations.validInt(e)));
 
         Trip trip = (Trip) Trip.getById(id, Trip.instances);
         String prompt = "New value:\n";
@@ -111,25 +67,25 @@ public class ManagerGui extends UserGui {
 
             switch (JOptionPane.showInputDialog("Please choose what to edit: ").toUpperCase()) {
                 case "0":
-                    trip.source = Data.getDialog(prompt, "name");
+                    trip.source = InputData.gui(prompt, e -> Validations.validName(e));
                     break;
                 case "1":
-                    trip.destination = Data.getDialog(prompt, "name");
+                    trip.destination = InputData.gui(prompt, e -> Validations.validName(e));
                     break;
                 case "2":
-                    trip.type = Data.getDialog(prompt, "tType");
+                    trip.type = InputData.gui(prompt, e -> Validations.validTripType(e));
                     break;
                 case "3":
-                    trip.stops = Integer.parseInt(Data.getDialog(prompt, "int"));
+                    trip.stops = Integer.parseInt(InputData.gui(prompt, e -> Validations.validInt(e)));
                     break;
                 case "4":
-                    trip.seats = Integer.parseInt(Data.getDialog(prompt, "int"));
+                    trip.seats = Integer.parseInt(InputData.gui(prompt, e -> Validations.validInt(e)));
                     break;
                 case "5":
-                    trip.price = Integer.parseInt(Data.getDialog(prompt, "int"));
+                    trip.price = Integer.parseInt(InputData.gui(prompt, e -> Validations.validInt(e)));
                     break;
                 case "6":
-                    trip.driverId = Integer.parseInt(Data.getDialog(prompt, "int"));
+                    trip.driverId = Integer.parseInt(InputData.gui(prompt, e -> Validations.validInt(e)));
                     break;
                 case "S":
                     Trip.saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
@@ -147,7 +103,7 @@ public class ManagerGui extends UserGui {
         
         listTrips();
 
-        int id = Integer.parseInt(Data.getDialog("Please type the id of the trip you want to edit: ", "int"));
+        int id = Integer.parseInt(InputData.gui("Please type the id of the trip you want to edit: ", e -> Validations.validInt(e)));
 
         Trip trip = (Trip) Trip.getById(id, Trip.instances);
 
@@ -155,25 +111,25 @@ public class ManagerGui extends UserGui {
         outputArea.append(trip.toString(trip.allInfo()));
         outputArea.append("\n\n\nAvailable drivers:\n");
         outputArea.append(Driver._listDrivers());
-        trip.driverId = Integer.parseInt(Data.getDialog("\nNew Driver Id: ", "int"));
+        trip.driverId = Integer.parseInt(InputData.gui("\nNew Driver Id: ", e -> Validations.validInt(e)));
         Trip.saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
 
     }
 
     private void addVehicle() {
-        String Type = Data.getDialog("Type: ", "name");
-        int Capacity = Integer.parseInt(Data.getDialog("Capacity: ", "int"));
-        String LicensePlate = Data.getDialog("License Plate: ", "name");
+        String Type = InputData.gui("Type: ", e -> Validations.validName(e));
+        int Capacity = Integer.parseInt(InputData.gui("Capacity: ", e -> Validations.validInt(e)));
+        String LicensePlate = InputData.gui("License Plate: ", e -> Validations.validName(e));
 
         new Vehicle(Type, Capacity, LicensePlate);
         Vehicle.saveInstances(Vehicle.instances, Vehicle.savedPath, Vehicle.csvHeader);
     }
 
     private void addEmployee() {
-        String Name = Data.getDialog("Name: ", "string");
-        String Email = Data.getDialog("Email: ", "email");
-        String Username = Data.getDialog("Username: ", "duser");
-        String password = Data.getDialog("Password: ", "pass");
+        String Name = InputData.gui("Name: ", e -> Validations.validString(e));
+        String Email = InputData.gui("Email: ", e -> Validations.validEmail(e));
+        String Username = InputData.gui("Username: ", e -> Validations.validUsername(e, Driver.instances));
+        String password = InputData.gui("Password: ", e -> Validations.validPass(e));
         new Driver(Name, Username, password, Email);
         Driver.saveInstances(Driver.instances, Driver.savedPath, Driver.csvHeader);
     }

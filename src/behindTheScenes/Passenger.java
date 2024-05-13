@@ -17,8 +17,8 @@ public class Passenger extends User {
         initiateClass(Passenger.savedPath, Passenger.className, Ticket.instances);
     }
 
-    public static void newInstance(String line) {
-        String data[] = line.split(",");
+    public static void newInstance(String[] data) {
+        
         new Passenger(Integer.parseInt(data[0]), data[1], data[3], data[4], data[2]);
     }
 }

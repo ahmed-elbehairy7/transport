@@ -41,9 +41,7 @@ public class Vehicle extends Savable {
         return this.type + "," + this.capacity + "," + this.licensePlate;
     }
 
-    public static void newInstance(String line) {
-
-        String[] data = line.split(",");
+    public static void newInstance(String[] data) {
 
         new Vehicle(data[0], Integer.parseInt(data[1]), data[2]);
     }
