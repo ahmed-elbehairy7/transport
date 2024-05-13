@@ -1,4 +1,4 @@
-package gui;
+package gui.frames;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -11,6 +11,9 @@ import behindTheScenes.Driver;
 import behindTheScenes.Trip;
 import behindTheScenes.User;
 import behindTheScenes.Vehicle;
+import gui.Data;
+import gui.components.Button;
+import gui.components.TextArea;
 
 public class ManagerGui extends UserGui {
     private Button ListTripsButton, addTripButton, removeTripButton, editTripButton, assignDriverButton, addVehicleButton, addEmployeeButton;

@@ -25,15 +25,6 @@ public class Savable {
     public Savable() {
     }
 
-    public static int generateId(ArrayList<Savable> instances) {
-        if (instances.size() == 0) {
-            return 1;
-        }
-        else {
-            return instances.getLast().id + 1;
-        }
-    }
-    
     public String toCsv() {
         return "";
     }
@@ -44,6 +35,15 @@ public class Savable {
 
     public void writeInstance(String savedPath) {
         writeToFile(savedPath, toCsv());
+    }
+
+    public static int generateId(ArrayList<Savable> instances) {
+        if (instances.size() == 0) {
+            return 1;
+        }
+        else {
+            return instances.getLast().id + 1;
+        }
     }
 
     public static void removeInstance(int id, ArrayList<Savable> instances, String savedPath, String csvHeader) {
@@ -90,32 +90,6 @@ public class Savable {
 
         for (short i = 0; i < instances.size(); i++) {
             instances.get(i).writeInstance(savedPath);
-        }
-    }
-
-    private static void newInstance(String line, String className) {
-        switch (className) {
-            case nTrip:
-                Trip.newInstance(line);
-                break;
-            case nTicket:
-                Ticket.newInstance(line);
-                break;
-            case nVehicle:
-                Vehicle.newInstance(line);
-                break;
-            case nPassenger:
-                Passenger.newInstance(line);
-                break;
-            case nManager:
-                Manager.newInstance(line);
-                break;
-            case nDriver:
-                Driver.newInstance(line);
-                break;
-        
-            default:
-                break;
         }
     }
 
@@ -186,4 +160,30 @@ public class Savable {
         return _getData(scanner, prompt, "string");
     }
 
+
+    private static void newInstance(String line, String className) {
+        switch (className) {
+            case nTrip:
+                Trip.newInstance(line);
+                break;
+            case nTicket:
+                Ticket.newInstance(line);
+                break;
+            case nVehicle:
+                Vehicle.newInstance(line);
+                break;
+            case nPassenger:
+                Passenger.newInstance(line);
+                break;
+            case nManager:
+                Manager.newInstance(line);
+                break;
+            case nDriver:
+                Driver.newInstance(line);
+                break;
+        
+            default:
+                break;
+        }
+    }
 }

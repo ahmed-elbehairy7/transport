@@ -24,6 +24,7 @@ public class User extends Savable{
         this.password = password;
 
     }
+
     public User(String name, String username, String password, String Email, ArrayList<Savable> instances) {
         this.id = generateId(instances);
 
@@ -32,6 +33,11 @@ public class User extends Savable{
         this.username = username;
         this.password = password;
 
+    }
+    
+    public String toCsv() {
+        return this.id + "," + this.name + "," + this.Email + "," + this.username + "," + this.password;
+        
     }
     
     public static User login(String username, String password, ArrayList<Savable> instances) {
@@ -57,11 +63,6 @@ public class User extends Savable{
         user.writeInstance(savedPath);
         user.success = true;
         return user;
-    }
-    
-    public String toCsv() {
-        return this.id + "," + this.name + "," + this.Email + "," + this.username + "," + this.password;
-        
     }
    
     public static void initiateClass(String usersFile, String className, ArrayList<Savable> instances) {

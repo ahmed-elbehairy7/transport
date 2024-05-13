@@ -18,6 +18,12 @@ public class Driver extends User {
         Driver.instances.add(this);
     }
 
+    public String toString() {
+        return "\n==============\nDriver details:\n\nName:      " + this.name + "\nEmail:     " + this.Email
+                + "\nusername:  " + this.username
+                + "\n==============\n";
+    }
+
     public static String _listDrivers() {
         Driver driver;
         String text = "";
@@ -31,12 +37,6 @@ public class Driver extends User {
 
     public static void listDrivers() {
         System.out.println(_listDrivers());
-    }
-
-    public String toString() {
-        return "\n==============\nDriver details:\n\nName:      " + this.name + "\nEmail:     " + this.Email
-                + "\nusername:  " + this.username
-                + "\n==============\n";
     }
     
     public static void initiateClass() {

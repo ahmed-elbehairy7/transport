@@ -28,9 +28,20 @@ public class Ticket extends Savable {
         Ticket.instances.add(this);
     }
     
-    @Override
     public String toCsv() {
         return this.id + "," + this.passengerId + "," + tripId;
+    }
+    public String toString() {
+        Trip trip;
+
+        for (short i = 0; i < Trip.instances.size(); i++) {
+            trip = (Trip) Trip.instances.get(i);
+            if (trip.id == this.tripId) {
+                return trip.toString("Ticket ID: " + this.id + "\nPassenger ID: " + this.passengerId + "\nTrip ID: "
+                        + this.tripId + "\n\nTrip Info:\n---\n" + trip.info());
+            }
+        }
+        return "";
     }
 
     public static String _listTickets(int passengerId) {
@@ -50,18 +61,6 @@ public class Ticket extends Savable {
         System.out.println(_listTickets(passengerId));
     }
     
-    public String toString() {
-        Trip trip;
-
-        for (short i = 0; i < Trip.instances.size(); i++) {
-            trip = (Trip) Trip.instances.get(i);
-            if (trip.id == this.tripId) {
-                return trip.toString("Ticket ID: " + this.id + "\nPassenger ID: " + this.passengerId + "\nTrip ID: "
-                        + this.tripId + "\n\nTrip Info:\n---\n" + trip.info());
-            }
-        }
-        return "";
-    }
 
     public static void newInstance(String line) {
         String[] data = line.split(",");

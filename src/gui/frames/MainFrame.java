@@ -1,10 +1,12 @@
-package gui;
+package gui.frames;
 
 import java.awt.GridLayout;
 
 import behindTheScenes.Driver;
 import behindTheScenes.Manager;
 import behindTheScenes.Passenger;
+import gui.components.Button;
+import gui.components.Frame;
 
 public class MainFrame extends Frame{
     

@@ -24,12 +24,6 @@ public class Vehicle extends Savable {
         this.type = type;
     }
 
-    public static void newInstance(String line) {
-
-        String[] data = line.split(",");
-
-        new Vehicle(data[0], Integer.parseInt(data[1]), data[2]);
-    }
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
@@ -45,6 +39,13 @@ public class Vehicle extends Savable {
 
     public String toCsv() {
         return this.type + "," + this.capacity + "," + this.licensePlate;
+    }
+
+    public static void newInstance(String line) {
+
+        String[] data = line.split(",");
+
+        new Vehicle(data[0], Integer.parseInt(data[1]), data[2]);
     }
 
     public static void initiateClass() {

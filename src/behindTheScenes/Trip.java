@@ -34,7 +34,8 @@ public class Trip extends Savable {
         Trip.instances.add(this);
     }
     
-    public Trip(int id, String type, String source, String destination, int stops, int seats, int price, int driverId, String cycle) {
+    public Trip(int id, String type, String source, String destination, int stops, int seats, int price, int driverId,
+            String cycle) {
         super();
         this.index = instances.size();
         this.id = id;
@@ -48,21 +49,8 @@ public class Trip extends Savable {
         this.driverId = driverId;
         Trip.instances.add(this);
     }
-
-    public static void initiateClass() {
-        initiateClass(Trip.savedPath,Trip.csvHeader, Trip.className, Trip.instances);
-
-    }
-
     
-    public static void newInstance(String line) {
-
-        String[] data = line.split(",");
-
-        new Trip(Integer.parseInt(data[0]), data[1], data[2], data[3], Integer.parseInt(data[4]),
-                Integer.parseInt(data[5]), Integer.parseInt(data[6]), Integer.parseInt(data[7]), data[8]);
-    }
-
+    
     public String toCsv() {
         return this.id + "," + this.type + "," + this.source + "," + this.destination + "," + this.stops + ","
                 + this.seats + "," + this.price + "," + this.driverId + "," + this.cycle;
@@ -139,5 +127,19 @@ public class Trip extends Savable {
 
     public String toString(String info) {
         return "==============\n" + info + "\n==============\n";
+    }
+
+    public static void initiateClass() {
+        initiateClass(Trip.savedPath,Trip.csvHeader, Trip.className, Trip.instances);
+
+    }
+
+    
+    public static void newInstance(String line) {
+
+        String[] data = line.split(",");
+
+        new Trip(Integer.parseInt(data[0]), data[1], data[2], data[3], Integer.parseInt(data[4]),
+                Integer.parseInt(data[5]), Integer.parseInt(data[6]), Integer.parseInt(data[7]), data[8]);
     }
 }

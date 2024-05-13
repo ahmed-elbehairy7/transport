@@ -1,4 +1,4 @@
-package gui;
+package gui.frames;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -10,6 +10,8 @@ import javax.swing.JScrollPane;
 import behindTheScenes.Ticket;
 import behindTheScenes.Trip;
 import behindTheScenes.User;
+import gui.components.Button;
+import gui.components.TextArea;
 
 public class PassengerGui extends UserGui {
     private Button BookATicketButton, listTicketsButton, removeTicketButton;

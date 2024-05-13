@@ -19,22 +19,6 @@ public class DriverCli extends UserCli {
                         this.Email));
     }
 
-    public static void listDrivers() {
-        try {
-            BufferedReader bf = new BufferedReader(new FileReader("drivers.csv"));
-        bf.readLine();
-        String line = bf.readLine();
-        while ((line = bf.readLine()) != null) {
-            String[] driverData = line.split(",");
-            System.out.println("\n\nId: " + driverData[0] + "\nName: " + driverData[1]);
-        }
-        }
-        catch (IOException e) {
-            System.out.println("There was an error while lising drivers");
-        }
-        
-    }
-
     public void startFlow() {
         /*
         If you log in with a driver credentials you are directed to the drivers profile with some basic information about the driver and the trips that are assigned to him by the manager. 
@@ -70,6 +54,22 @@ public class DriverCli extends UserCli {
         return "\n==============\nDriver details:\n\nName:      " + this.name + "\nEmail:     " + this.Email
                 + "\nusername:  " + this.username
                 + "\n==============\n";
+    }
+
+    public static void listDrivers() {
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader("drivers.csv"));
+        bf.readLine();
+        String line = bf.readLine();
+        while ((line = bf.readLine()) != null) {
+            String[] driverData = line.split(",");
+            System.out.println("\n\nId: " + driverData[0] + "\nName: " + driverData[1]);
+        }
+        }
+        catch (IOException e) {
+            System.out.println("There was an error while lising drivers");
+        }
+        
     }
     
     public static void initiateClass() {
