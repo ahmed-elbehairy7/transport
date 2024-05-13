@@ -88,7 +88,7 @@ public class PassengerGui extends UserGui {
         
         listTickets();
 
-        String ans = JOptionPane.showInputDialog("Please type the id of the ticket you want to delete, or type nothing to exit");
+        String ans = JOptionPane.showInputDialog("Please type the id of the ticket you want to delete");
 
         int id = Integer.parseInt(ans);
         

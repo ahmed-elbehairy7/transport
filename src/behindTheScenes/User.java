@@ -33,33 +33,6 @@ public class User extends Savable{
         this.password = password;
 
     }
-
-    // public User(ArrayList<Savable> instances, String savedPath, String className) {
-    //     //Initialize the scanner
-    //     Scanner scanner = new Scanner(System.in);
-
-    //     // Ask the user to register or login
-    //     System.out.print("\nWelcome!\n\nPlease enter 'r' to register, any key to login: ");
-
-    //     // Get what the user choose
-    //     switch (scanner.nextLine()) {
-    //         case "r":
-    //             register(instances, savedPath, className);
-    //             break;
-    //         default:
-    //             login(instances);
-    //             break;
-    //     }
-
-    //     if (!this.success) {
-    //         System.out.println("Invalid credentials");
-    //         System.exit(1);
-    //     }
-
-    //     Trip.initiateClass();
-    //     Vehicle.initiateClass();
-    //     Ticket.initiateClass();
-    // }
     
     public static User login(String username, String password, ArrayList<Savable> instances) {
 

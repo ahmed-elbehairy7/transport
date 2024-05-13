@@ -14,10 +14,10 @@ public class Frame extends JFrame {
         start();
     }
 
-    private void start() { 
-        setVisible(true);
+    public void start() { 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(720, 720);
         getContentPane().setBackground(Color.WHITE);
+        setVisible(true);
     }
 }

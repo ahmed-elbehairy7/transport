@@ -1,11 +1,6 @@
 package behindTheScenes;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.lang.System;
-
-import behindTheScenes.Ticket;
-import behindTheScenes.User;
 
 public class Passenger extends User {
 

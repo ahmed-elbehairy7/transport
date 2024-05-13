@@ -1,9 +1,7 @@
 package cli;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import behindTheScenes.*;
@@ -44,13 +42,13 @@ public class DriverCli extends UserCli {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("\n\nPlease choose one of the following:\n\n(P) Personal info\n(T) Trips\n");
+            System.out.println("\n\nPlease choose one of the following:\n\n(P) Personal info\n(S) Show assigned trips\n(Q) Quit\n\n");
 
             switch (scanner.nextLine().toUpperCase()) {
                 case "P":
                     System.out.println(toString());
                     break;
-                case "T":
+                case "S":
                      System.out.println("\n\nHere's the trips assigned to you: \n");
                      for (short i = 0; i < Trip.instances.size(); i++) {
                          Trip trip = (Trip) Trip.instances.get(i);
@@ -59,6 +57,8 @@ public class DriverCli extends UserCli {
                          }
                      }
                      break;
+                 case "Q":
+                     return;
                 default:
                     break;
             }

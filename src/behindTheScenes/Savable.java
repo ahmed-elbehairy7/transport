@@ -82,7 +82,6 @@ public class Savable {
     }
 
     public static void initiateClass(String savedPath, String csvHeader, String className, ArrayList<Savable> instances) {
-
         getSaved(instances, savedPath, className, csvHeader);
     }
     
@@ -124,7 +123,7 @@ public class Savable {
         instances.clear();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(savedPath));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("..\\db\\" + savedPath));
             String line;
             bufferedReader.readLine();
             while ((line = bufferedReader.readLine()) != null) {
@@ -159,7 +158,7 @@ public class Savable {
     public static boolean _writeToFile(String fileName, String data, boolean append) {
 
         try {
-            FileWriter fileWriter = new FileWriter(fileName, append);
+            FileWriter fileWriter = new FileWriter("..\\db\\" + fileName, append);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(data);
             bufferedWriter.newLine();

@@ -40,5 +40,7 @@ public class MainFrame extends Frame{
             new Login(Driver.className);
         });
         add(DriverButton);
+
+        start();
     }
     }

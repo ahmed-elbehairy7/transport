@@ -29,7 +29,7 @@ public class ManagerCli extends UserCli {
         while (true) {
 
             System.out.println(
-                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\n(D) Assign a driver\n(V) Add a vehicle\n(M) Add an Employee (driver)\n(G) Generate report\n(Q) Quit\n\n");
+                    "Please choose one of the following:\n\n(L) List all trips\n(A) Add a trip\n(R) Remove a trip\n(E) Edit a trip\n(D) Assign a driver\n(V) Add a vehicle\n(M) Add an Employer (driver)\n(Q) Quit\n\n");
 
             switch (scanner.nextLine().toUpperCase()) {
                 case "L":
@@ -53,9 +53,6 @@ public class ManagerCli extends UserCli {
                 case "M":
                     addEmployee(scanner);
                     break;
-                case "G":
-                    generateReport(scanner);
-                    break;
                 case "Q":
                     return;
                 default:
@@ -66,15 +63,12 @@ public class ManagerCli extends UserCli {
 
     }
 
-    public void generateReport(Scanner scanner) {
-        System.out.println("Managers in company");
-    }
-
     public void addEmployee(Scanner scanner) {
         String Name = Savable.getData(scanner, "Name: ");
         String Email = Savable._getData(scanner, "Email: ", "email");
         String Username = Savable._getData(scanner, "Username: ", "duser");
-        new Driver(Name, Username, "initial", Email);
+        String password = Savable._getData(scanner, "password: ", "pass");
+        new Driver(Name, Username, password, Email);
         Driver.saveInstances(Driver.instances, Driver.savedPath, Driver.csvHeader);
     }
 
@@ -82,7 +76,7 @@ public class ManagerCli extends UserCli {
         
         String Type = Savable.getData(scanner, "Type: ");
         int Capacity = Integer.parseInt(Savable._getData(scanner, "Capacity: ", "int"));
-        String LicensePlate = Savable.getData(scanner, "License Plate: ");
+        String LicensePlate = Savable._getData(scanner, "License Plate: ", "name");
 
         new Vehicle(Type, Capacity, LicensePlate);
         Vehicle.saveInstances(Vehicle.instances, Vehicle.savedPath, Vehicle.csvHeader);
@@ -116,6 +110,7 @@ public class ManagerCli extends UserCli {
     }
     
     public void editTrip(Scanner scanner, boolean driver) {
+        Trip.listInstances(Trip.instances);
         System.out.println("Please type the id of the trip you want to edit: ");
         int id = Integer.parseInt(scanner.nextLine());
 

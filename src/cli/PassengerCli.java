@@ -80,10 +80,7 @@ public class PassengerCli extends UserCli {
 
         System.out.println("List of the available trips:\n\n");
 
-        for (short i = 0; i < Trip.instances.size(); i++) {
-            Trip trip = (Trip) Trip.instances.get(i);
-            System.out.println(trip.toString("Index: " + i + "\n" + trip.info()));
-        }
+        Trip.listInstances(Trip.instances);
 
         System.out.println("please type the index of the trip you want to select, type nothing to exit: ");
         String ans = scanner.nextLine();

@@ -1,14 +1,6 @@
 package behindTheScenes;
 
-import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
-
-import behindTheScenes.Driver;
-import behindTheScenes.Savable;
-import behindTheScenes.Trip;
-import behindTheScenes.Validations;
-import behindTheScenes.Vehicle;
 
 public class Manager extends User {
 

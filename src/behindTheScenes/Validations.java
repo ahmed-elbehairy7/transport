@@ -53,7 +53,7 @@ public class Validations {
 
     private static boolean validUsername(String username, ArrayList<Savable> instances) {
         for (short i = 0; i < instances.size(); i++) {
-            if (username == ((User) instances.get(i)).username) {
+            if (((User) instances.get(i)).username.equals(username)) {
                 return false;
             }
         }
@@ -69,6 +69,11 @@ public class Validations {
     }
 
     private static boolean validInt(String text) {
-        return text.length() > 1;
+        try {
+            Integer.parseInt(text);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

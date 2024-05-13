@@ -1,13 +1,5 @@
 package behindTheScenes;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
-
-import behindTheScenes.Trip;
-import behindTheScenes.User;
 
 public class Driver extends User {
 
@@ -26,21 +18,19 @@ public class Driver extends User {
         Driver.instances.add(this);
     }
 
+    public static String _listDrivers() {
+        Driver driver;
+        String text = "";
+        for (short i = 0; i < Driver.instances.size(); i++) {
+            driver = (Driver) Driver.instances.get(i);
+            text += "\n\nId: " + driver.id + "\nName: " + driver.name + "\n";
+        }
+        return text;
+    }
+
 
     public static void listDrivers() {
-        try {
-            BufferedReader bf = new BufferedReader(new FileReader("drivers.csv"));
-        bf.readLine();
-        String line = bf.readLine();
-        while ((line = bf.readLine()) != null) {
-            String[] driverData = line.split(",");
-            System.out.println("\n\nId: " + driverData[0] + "\nName: " + driverData[1]);
-        }
-        }
-        catch (IOException e) {
-            System.out.println("There was an error while lising drivers");
-        }
-        
+        System.out.println(_listDrivers());
     }
 
     public String toString() {
