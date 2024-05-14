@@ -53,19 +53,22 @@ public class Register extends UserRegisteration {
                 if (!Validations.validUsername(username, Passenger.instances)) {
                     return;
                 }
-                user = Passenger.register(name, email, username, password, Passenger.instances, Passenger.savedPath, Passenger.className);
+                user = new Passenger(Passenger.generateId(), name, email, username, password, Passenger.instances.size());
+                user.writeInstance(Passenger.savedPath);
                 break;
             case Manager.className:
             if (!Validations.validUsername(username, Manager.instances)) {
                     return;
                 }
-                user = Manager.register(name, email, username, password, Manager.instances, Manager.savedPath, Manager.className);
+                user = new Manager(Manager.generateId(), name, email, username, password, Manager.instances.size());
+                user.writeInstance(Manager.savedPath);
                 break;
             case Driver.className:
             if (!Validations.validUsername(username, Driver.instances)) {
                     return;
                 }
-                user = Driver.register(name, email, username, password, Driver.instances, Driver.savedPath, Driver.className);
+                user = new Driver(Driver.generateId(), name, email, username, password, Driver.instances.size());
+                user.writeInstance(Driver.savedPath);
                 break;
             default:
                 user = new User();

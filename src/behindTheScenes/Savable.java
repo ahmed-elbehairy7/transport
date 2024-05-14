@@ -8,6 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import functions.stringAndStringToBooleanToString;
+import functions.stringToBoolean;
+
 public class Savable {
 
     public final static String nTrip = "Trip";
@@ -18,46 +21,101 @@ public class Savable {
     public final static String nDriver = "Driver";
 
     
-    public int index;
     public int id;
 
     public Savable() {
     }
+    
 
+    public String toCsv(String text) {
+        return this.id + "," + text;
+    }
     public String toCsv() {
-        return "";
+        return this.id + ",";
+    }
+    
+    public String displayText(String text) {
+        return "Id: " + this.id + "\n" + text;
     }
 
-    public String toString() {
-        return "";
+    public String toString(String displayText) {
+        return "==============\n" + displayText + "==============\n";
     }
 
     public void writeInstance(String savedPath) {
         writeToFile(savedPath, toCsv());
     }
 
+    public void fromArray(String[] data) {
 
-    public static int generateId(ArrayList<Savable> instances) {
+    }
+
+    public void editInstance(String keyIndex, String[] prompts, ArrayList<?> instances, stringToBoolean[] validators,
+        String className, String savedPath, String csvHeader, stringAndStringToBooleanToString inputFunction) {
+        byte length = (byte) prompts.length;
+        String[] old = this.toCsv().split(",");
+        String text = this.id + "";
+        byte diff = 1;
+        for (byte i = 1; old.length > length + i; i++, diff++) {
+            text += "," + old[i];
+        }
+        for (byte i = 0; i < length; i++) {
+            if (Integer.parseInt(keyIndex) != i) {
+                text += "," + old[i + diff];
+                continue;
+            }
+            text += "," + inputFunction.input(prompts[i] + ": ", validators[i]);
+        }
+
+        String[] data = text.split(",");
+        fromArray(data);
+    }
+    
+    public static String editables(String[] prompts) {
+        String text = "Please choose what to edit:\n\n";
+        for (byte i = 0; i < prompts.length; i++) {
+            text += "(" + i + ") " + prompts[i] + "\n";
+        }
+        text += "(S) Save And Exit\n(Q) Quit\n";
+        return text;
+    }
+
+    
+    public static Savable addInstance(String[] prompts, ArrayList<?> instances, stringToBoolean[] validators, String className, String savedPath, String csvHeader, stringAndStringToBooleanToString inputFunction) {
+        byte length = (byte) prompts.length;
+        String text = generateId(instances) + "";
+        for (byte i = 0; i < length; i++) {
+            text += "," + inputFunction.input(prompts[i] + ": ", validators[i]);
+        }
+        String[] data = text.split(",");
+        newInstance(data, className);
+        saveInstances(instances, savedPath, csvHeader);
+        return (Savable) instances.getLast();
+    }
+
+
+    public static int generateId(ArrayList<?> instances) {
+        sortInstances(instances);
         if (instances.size() == 0) {
             return 1;
         }
         else {
-            return instances.getLast().id + 1;
+            return ((Savable) instances.getLast()).id + 1;
         }
     }
 
-    public static void removeInstance(int id, ArrayList<Savable> instances, String savedPath, String csvHeader) {
+    public static void removeInstance(int id, ArrayList<?> instances, String savedPath, String csvHeader) {
         for (short i = 0; i < instances.size(); i++) {
-            if (instances.get(i).id == id) {
+            if (((Savable) instances.get(i)).id == id) {
                 instances.remove(i);
                 saveInstances(instances, savedPath, csvHeader);
-                System.out.println("Item removed successfully");
             }
         }
 
     }
 
-    public static Savable getById(int id, ArrayList<Savable> instances) {
+    public static Savable getById(String stringId, ArrayList<?> instances) {
+        int id = Integer.parseInt(stringId);
         for (short i = 0; i < instances.size(); i++) {
             Savable savable = (Savable) instances.get(i);
             if (savable.id == id) {
@@ -67,43 +125,30 @@ public class Savable {
         return new Savable();
     }
 
-    public static void removeInstance(int id, String className, ArrayList<Savable> instances, String savedPath, String csvHeader) {
-        switch (className) {
-            case "Trip":
-                Trip.removeInstance(id, instances, savedPath, csvHeader);
-                break;
-            case "Ticket":
-                Ticket.removeInstance(id, instances, savedPath, csvHeader);
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    public static void initiateClass(String savedPath, String csvHeader, String className, ArrayList<Savable> instances) {
+    public static void initiateClass(String savedPath, String csvHeader, String className, ArrayList<?> instances) {
         getSaved(instances, savedPath, className, csvHeader);
     }
     
-    public static void saveInstances(ArrayList<Savable> instances, String savedPath, String csvHeader) {
+    public static void saveInstances(ArrayList<?> instances, String savedPath, String csvHeader) {
         _writeToFile(savedPath, csvHeader, false);
-
-        for (short i = 0; i < instances.size(); i++) {
-            instances.get(i).writeInstance(savedPath);
+        sortInstances(instances);
+        for (byte i = 0; i < instances.size(); i++) {
+            ((Savable) instances.get(i)).writeInstance(savedPath);
         }
     }
 
-    public static void getSaved(ArrayList<Savable> instances, String savedPath, String className, String csvHeader) {
+    public static void getSaved(ArrayList<?> instances, String savedPath, String className, String csvHeader) {
         instances.clear();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("..\\db\\" + savedPath));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("db\\" + savedPath));
             String line;
             bufferedReader.readLine();
             while ((line = bufferedReader.readLine()) != null) {
-
-                newInstance(line, className);
+                String[] data = line.split(",");
+                newInstance(data, className);
             }
+            sortInstances(instances);
             bufferedReader.close();
         } catch (FileNotFoundException e) {
             saveInstances(instances, savedPath, csvHeader);
@@ -114,7 +159,21 @@ public class Savable {
         }
     }
 
-    public static String _listInstances(ArrayList<Savable> instances) {
+    public static ArrayList<?> sortInstances(ArrayList<?> instances) {
+        instances.sort((a, b) -> {
+            if (((Savable) a).id < ((Savable) b).id) {
+                return -1;
+            }
+            if (((Savable) a).id < ((Savable) b).id) {
+                return 1;
+            }
+            return 0;
+
+        });
+        return instances;
+    }
+
+    public static String _listInstances(ArrayList<?> instances) {
         String text = "";
         for (short i = 0; i < instances.size(); i++) {
             text += (instances.get(i).toString()) + "\n";
@@ -122,7 +181,7 @@ public class Savable {
         return text;
     }
 
-    public static void listInstances(ArrayList<Savable> instances) {
+    public static void listInstances(ArrayList<?> instances) {
         System.out.println(_listInstances(instances));
     }
 
@@ -133,7 +192,7 @@ public class Savable {
     public static boolean _writeToFile(String fileName, String data, boolean append) {
 
         try {
-            FileWriter fileWriter = new FileWriter("..\\db\\" + fileName, append);
+            FileWriter fileWriter = new FileWriter("db\\" + fileName, append);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(data);
             bufferedWriter.newLine();
@@ -147,8 +206,7 @@ public class Savable {
 
     }
 
-    private static void newInstance(String line, String className) {
-        String[] data = line.split(",");
+    private static void newInstance(String[] data, String className) {
         switch (className) {
             case nTrip:
                 Trip.newInstance(data);
@@ -173,4 +231,5 @@ public class Savable {
                 break;
         }
     }
+
 }

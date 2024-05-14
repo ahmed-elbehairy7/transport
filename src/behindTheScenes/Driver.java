@@ -1,27 +1,27 @@
 package behindTheScenes;
 import java.util.ArrayList;
 
+import data.Validations;
+import functions.stringAndStringToBooleanToString;
+import functions.stringToBoolean;
+
 public class Driver extends User {
 
-    public static ArrayList<Savable> instances = new ArrayList<>();
+    public static ArrayList<User> instances = new ArrayList<>();
     public final static String className = "Driver";
-    public final static String savedPath = "drivers.csv";    
+    public final static String savedPath = "drivers.csv";
+    public final static stringToBoolean[] validators = { e -> Validations.validName(e), e -> Validations.validEmail(e), e -> Validations.validUsername(e, Driver.instances), e -> Validations.validPass(e) };
 
+    public Driver() {}
     public Driver( String name, String username, String password, String Email) {
-        super(generateId(Driver.instances), name, username, password, Email);
+        super(generateId(), name, username, password, Email);
         Driver.instances.add(this);
 
     }
 
-    public Driver(int id, String name, String username, String password, String Email) {
-        super(id, name, username, password, Email);
+    public Driver(int id, String name, String Email, String username, String password) {
+        super(id, name, Email, username, password);
         Driver.instances.add(this);
-    }
-
-    public String toString() {
-        return "\n==============\nDriver details:\n\nName:      " + this.name + "\nEmail:     " + this.Email
-                + "\nusername:  " + this.username
-                + "\n==============\n";
     }
 
     public static String _listDrivers() {
@@ -34,18 +34,64 @@ public class Driver extends User {
         return text;
     }
 
+    public void writeInstance() {
+        writeToFile(Driver.savedPath, toCsv());
+    }
+
+    public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction) {
+        editInstance(keyIndex, prompts, instances, Driver.validators, Driver.className, Driver.savedPath, Driver.csvHeader, inputFunction);
+    }
+
+    public static String editables() {
+        return editables(Driver.prompts);
+    }
+    
+    public static Savable addInstance(stringAndStringToBooleanToString inputFunction) {
+        return addInstance(prompts, instances, Driver.validators, Driver.className, Driver.savedPath, Driver.csvHeader, inputFunction);
+    }
+
+
+    public static int generateId() {
+        return generateId(instances);
+    }
+
+    public static void removeInstance(int id) {
+        removeInstance(id, instances, Driver.savedPath, csvHeader);
+    }
+
+    public static Savable getById(String id) {
+        return getById(id, instances);
+    }
+
+    public static void initiateClass() {
+        initiateClass(Driver.savedPath, csvHeader, Driver.className, instances);
+    }
+    
+    public static void saveInstances() {
+        saveInstances(instances, Driver.savedPath, csvHeader);
+    }
+
+    public static void getSaved() {
+        getSaved(instances, Driver.savedPath, Driver.className, csvHeader);
+    }
+
+    public static String _listInstances() {
+        return _listInstances(instances);
+    }
+
+    public static void listInstances() {
+        listInstances(instances);
+    }
+
 
     public static void listDrivers() {
         System.out.println(_listDrivers());
     }
-    
-    public static void initiateClass() {
-        initiateClass(Driver.savedPath, Driver.className, Driver.instances);
-    }
 
     public static void newInstance(String[] data) {
-        
-        new Driver(Integer.parseInt(data[0]), data[1], data[3], data[4], data[2]);
+        Driver driver = new Driver();
+        driver.fromArray(data);
+        instances.add(driver);
     }
     
 }

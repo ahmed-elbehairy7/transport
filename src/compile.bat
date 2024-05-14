@@ -1,3 +1,3 @@
 @echo off
 
-javac Main.java -d ../dist
+javac Main.java -d ../dist %*

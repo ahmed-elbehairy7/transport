@@ -7,14 +7,12 @@ public class Frame extends JFrame {
     
     public Frame(String title) {
         setTitle(title);
-        start();
     }
     public Frame() {
         setTitle("Transport Company App");
-        start();
     }
 
-    public void start() { 
+    public void display() { 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(720, 720);
         getContentPane().setBackground(Color.WHITE);

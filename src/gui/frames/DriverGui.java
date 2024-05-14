@@ -26,7 +26,7 @@ public class DriverGui extends UserGui {
         for (short i = 0; i < Trip.instances.size(); i++) {
             Trip trip = (Trip) Trip.instances.get(i);
             if (user.id ==trip.driverId) {
-                outputArea.append(trip.toString(trip.info()));
+                outputArea.append(trip.toString(trip.displayText()));
             }
         }
     }

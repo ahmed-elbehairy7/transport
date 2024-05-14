@@ -8,8 +8,10 @@ import behindTheScenes.Passenger;
 import gui.components.Button;
 import gui.components.Frame;
 
-public class MainFrame extends Frame{
+public class MainFrame extends Frame {
     
+    public final String[] classNames = { Passenger.className, Manager.className, Driver.className };
+    public String className;
     public MainFrame() {
         super();
 
@@ -19,30 +21,16 @@ public class MainFrame extends Frame{
         Manager.initiateClass();
         Driver.initiateClass();
 
-        //Passenger button
-        Button PassengerButton = new Button(Passenger.className);
-        PassengerButton.addActionListener(e -> {
-            dispose();
-            new Login(Passenger.className);
-        });
-        add(PassengerButton);
+        for (byte i = 0; i < 3; i++) {
+            className = classNames[i];
+            Button newButton = new Button(className);
+            newButton.addActionListener(e -> {
+                dispose();
+                new Login(className);
+            });
+            add(newButton);
+        }
 
-        //Manager button
-        Button ManagerButton = new Button(Manager.className);
-        ManagerButton.addActionListener(e -> {
-            dispose();
-            new Login(Manager.className);
-        });
-        add(ManagerButton);
-
-        //Driver button
-        Button DriverButton = new Button(Driver.className);
-        DriverButton.addActionListener(e -> {
-            dispose();
-            new Login(Driver.className);
-        });
-        add(DriverButton);
-
-        start();
+        display();
     }
     }

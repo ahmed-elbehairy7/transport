@@ -26,9 +26,14 @@ public class Validations {
                 .matcher(pass).matches();
     }
 
+    public static boolean validYesOrNo(String text) {
+        char firstChar = text.toUpperCase().charAt(0);
+        return firstChar == 'Y' || firstChar == 'N';
+    }
+
     public static boolean validUsername(String username, ArrayList<User> instances) {
         for (short i = 0; i < instances.size(); i++) {
-            if (( instances.get(i)).username.equals(username)) {
+            if ( instances.get(i).username.equals(username)) {
                 return false;
             }
         }

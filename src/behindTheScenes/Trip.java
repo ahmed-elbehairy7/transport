@@ -1,10 +1,10 @@
 package behindTheScenes;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import data.InputData;
 import data.Validations;
+import functions.stringAndStringToBooleanToString;
+import functions.stringToBoolean;
 
 public class Trip extends Savable {
 
@@ -12,6 +12,8 @@ public class Trip extends Savable {
     public final static String csvHeader = "id,type,source,destination,stops,seats,price,driverId,cycle";
     public final static String savedPath = "trips.csv";
     public final static String className = "Trip";
+    public final static String[] prompts = {"Type", "Source", "Destination", "Stops", "Seats", "Price", "DriverId", "Cycle"};
+    public final static stringToBoolean[] validators = {e -> Validations.validTripType(e), e -> Validations.validString(e), e -> Validations.validString(e), e -> Validations.validInt(e), e -> Validations.validInt(e), e -> Validations.validInt(e), e -> Validations.validInt(e), e -> Validations.validCycle(e)};
 
     public String type;
     public String source;
@@ -21,26 +23,13 @@ public class Trip extends Savable {
     public int seats;
     public int price;
     public int driverId;
-
-    public Trip(String type, String source, String destination, int stops, int seats, int price, int driverId,
-            String cycle) {
-        super();
-        this.id = generateId(Trip.instances);
-        this.type = type;
-        this.source = source;
-        this.destination = destination;
-        this.stops = stops;
-        this.seats = seats;
-        this.price = price;
-        this.cycle = cycle;
-        this.driverId = driverId;
-        Trip.instances.add(this);
-    }
     
+    public Trip() {
+    }
+
     public Trip(int id, String type, String source, String destination, int stops, int seats, int price, int driverId,
             String cycle) {
         super();
-        this.index = instances.size();
         this.id = id;
         this.type = type;
         this.source = source;
@@ -52,95 +41,90 @@ public class Trip extends Savable {
         this.driverId = driverId;
         Trip.instances.add(this);
     }
+
+    public void fromArray(String[] data) {
+        this.id = Integer.parseInt(data[0]);
+        this.type = data[1];
+        this.source = data[2];
+        this.destination = data[3];
+        this.stops = Integer.parseInt(data[4]);
+        this.seats =Integer.parseInt(data[5]);
+        this.price = Integer.parseInt(data[6]);
+        this.driverId = Integer.parseInt(data[7]);
+        this.cycle = data[8];
+    }
     
+    public String allDetails() {
+        return displayText() + "Type: " + this.type + "\nCycle: " +this.cycle + "\nDriver Id: " + this.driverId + "\nPrice: " + this.price + "\n";
+    }
     
     public String toCsv() {
-        return this.id + "," + this.type + "," + this.source + "," + this.destination + "," + this.stops + ","
-                + this.seats + "," + this.price + "," + this.driverId + "," + this.cycle;
+        return toCsv(this.type + "," + this.source + "," + this.destination + "," + this.stops + ","
+                + this.seats + "," + this.price + "," + this.driverId + "," + this.cycle);
     }
 
-    public String allInfo() {
-        return "ID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
-                + this.stops + "\nSeats: " + this.seats + "\nDriver: " + this.driverId + "\nType: " + this.type
-                + "\nPrice: " + this.price;
-    }
-    
-    public void assignDriver() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("\n\nChoosed Trip:\n");
-        System.out.println(toString(allInfo()));
-        System.out.println("Please press enter to view list of available drivers");
-        scanner.nextLine();
-        Driver.listDrivers();
-        this.driverId = Integer.parseInt(InputData.cli(scanner, "\nNew Driver Id: ", e -> Validations.validInt(e)));
-        saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
-
-    }
-
-    public void editTrip() {
-        Scanner scanner = new Scanner(System.in);
-        String prompt = "\nNew Value: ";
-        while (true) {
-            System.out.println(toString(allInfo()));
-            System.out.println(
-                    "Please choose what to edit:\n\n(0) Source\n(1) Destination\n(2) Type\n(3) Stops\n(4) Seats\n(5) Price\n(6) Driver\n(S) Save and exit\n(Q) Quit without saving\n\n");
-
-            switch (scanner.nextLine().toUpperCase()) {
-                case "0":
-                    this.source = InputData.cli(scanner, prompt);
-                    break;
-                case "1":
-                    this.destination = InputData.cli(scanner, prompt);
-                    break;
-                case "2":
-                    this.type = InputData.cli(scanner, prompt, e -> Validations.validTripType(e));
-                    break;
-                case "3":
-                    this.stops = Integer.parseInt(InputData.cli(scanner, prompt, e -> Validations.validInt(e)));
-                    break;
-                case "4":
-                    this.seats = Integer.parseInt(InputData.cli(scanner, prompt, e -> Validations.validInt(e)));
-                    break;
-                case "5":
-                    this.price = Integer.parseInt(InputData.cli(scanner, prompt, e -> Validations.validInt(e)));
-                    break;
-                case "6":
-                    this.driverId = Integer.parseInt(InputData.cli(scanner, prompt, e -> Validations.validInt(e)));
-                    break;
-                case "S":
-                    saveInstances(Trip.instances, Trip.savedPath, Trip.csvHeader);
-                    return;
-                case "Q":
-                    getSaved(Trip.instances, Trip.savedPath, Trip.className, Trip.csvHeader);
-                    return;
-                default:
-                    break;
-            }
-        }
-    }
-
-    public String info() {
-        return "Index: " + this.index + "\nID: " + this.id + "\nSource: " + this.source + "\nDestination: " + this.destination + "\nStops: "
-                + this.stops + "\nCycle: " + this.cycle;
+    public String displayText() {
+        return displayText("Source: " + this.source + "\nDestination: " + this.destination + "\nStops: "
+                + this.stops + "\nSeats: " + this.seats + "\n");
     }
     
     public String toString() {
-        return "==============\n" + info() + "\n==============\n";
+        return toString(displayText());
+    }
+    
+    public void writeInstance() {
+        writeInstance(savedPath);
     }
 
-    public String toString(String info) {
-        return "==============\n" + info + "\n==============\n";
+    public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction) {
+        editInstance(keyIndex, prompts, instances, validators, className, savedPath, csvHeader, inputFunction);
     }
 
-    public static void initiateClass() {
-        initiateClass(Trip.savedPath,Trip.csvHeader, Trip.className, Trip.instances);
-
+    public static String editables() {
+        return editables(Trip.prompts);
     }
 
     
-    public static void newInstance(String[] data) {
+    public static Savable addInstance(stringAndStringToBooleanToString inputFunction) {
+        return addInstance(prompts, instances, validators, className, savedPath, csvHeader, inputFunction);
+    }
 
-        new Trip(Integer.parseInt(data[0]), data[1], data[2], data[3], Integer.parseInt(data[4]),
-                Integer.parseInt(data[5]), Integer.parseInt(data[6]), Integer.parseInt(data[7]), data[8]);
+
+    public static int generateId() {
+        return generateId(instances);
+    }
+
+    public static void removeInstance(int id) {
+        removeInstance(id, instances, savedPath, csvHeader);
+    }
+
+    public static Savable getById(String id) {
+        return getById(id, instances);
+    }
+
+    public static void initiateClass() {
+        initiateClass(savedPath, csvHeader, className, instances);
+    }
+    
+    public static void saveInstances() {
+        saveInstances(instances, savedPath, csvHeader);
+    }
+
+    public static void getSaved() {
+        getSaved(instances, savedPath, className, csvHeader);
+    }
+
+    public static String _listInstances() {
+        return _listInstances(instances);
+    }
+
+    public static void listInstances() {
+        listInstances(instances);
+    }
+    
+    public static void newInstance(String[] data) {
+        Trip trip = new Trip();
+        trip.fromArray(data);
+        instances.add(trip);
     }
 }

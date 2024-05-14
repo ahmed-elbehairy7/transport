@@ -1,5 +1,5 @@
 package functions;
 
-public interface stringFunction {
+public interface voidToString {
     public String input();
 }

@@ -39,7 +39,6 @@ public class UserGui extends Frame {
         buttonPanel.setLayout(new GridLayout(length, 1));
 
         for (byte i = 0; i < length; i++) {
-            //Book a ticket
             Button newButton = new Button(buttonTexts[i]);
             newButton.addActionListener(functions[i]);
             buttonPanel.add(newButton);

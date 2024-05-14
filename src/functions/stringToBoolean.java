@@ -1,5 +1,5 @@
 package functions;
 
-public interface booleanFunction {
+public interface stringToBoolean {
     public boolean check(String text);
 }
