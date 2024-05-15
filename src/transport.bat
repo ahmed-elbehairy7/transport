@@ -1,5 +1,3 @@
 @echo off
 
-cd ..
-transport %*
-cd src
+java -cp ../dist Main %*

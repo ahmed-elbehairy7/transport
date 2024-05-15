@@ -1,3 +1,5 @@
 @echo off
 
-java -cp dist Main %*
+cd src
+call transport.bat
+cd ..

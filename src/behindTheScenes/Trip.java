@@ -71,13 +71,9 @@ public class Trip extends Savable {
     public String toString() {
         return toString(displayText());
     }
-    
-    public void writeInstance() {
-        writeInstance(savedPath);
-    }
 
     public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction) {
-        editInstance(keyIndex, prompts, instances, validators, className, savedPath, csvHeader, inputFunction);
+        editInstance(keyIndex, inputFunction, prompts, validators);
     }
 
     public static String editables() {

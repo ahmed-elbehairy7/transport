@@ -35,11 +35,11 @@ public class Driver extends User {
     }
 
     public void writeInstance() {
-        writeToFile(Driver.savedPath, toCsv());
+        writeInstance(Driver.savedPath);
     }
 
     public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction) {
-        editInstance(keyIndex, prompts, instances, Driver.validators, Driver.className, Driver.savedPath, Driver.csvHeader, inputFunction);
+        editInstance(keyIndex, instances, validators, inputFunction);
     }
 
     public static String editables() {

@@ -22,12 +22,11 @@ public class Passenger extends User {
     }
 
     public void writeInstance() {
-        writeToFile(Passenger.savedPath, toCsv());
+        writeInstance(Passenger.savedPath);
     }
 
     public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction) {
-        editInstance(keyIndex, prompts, Passenger.instances, Passenger.validators, Passenger.className,
-                Passenger.savedPath, Passenger.csvHeader, inputFunction);
+        editInstance(keyIndex, instances, validators, inputFunction);
     }
     
     public static String editables() {

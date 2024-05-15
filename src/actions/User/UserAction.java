@@ -13,6 +13,6 @@ public class UserAction extends Action {
     
     public User startUserFlow(User user, stringAndStringToBooleanToString inputFunction, stringToVoid outputFunction, boolean gui) {
         super.startFlow(inputFunction, outputFunction, gui);
-        return user;
+        return new User();
     }
 }

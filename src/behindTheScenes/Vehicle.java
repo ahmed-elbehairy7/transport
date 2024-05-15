@@ -48,12 +48,8 @@ public class Vehicle extends Savable {
         return toString(displayText());
     }
 
-    public void writeInstance() {
-        writeInstance(savedPath);
-    }
-
     public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction) {
-        editInstance(keyIndex, Vehicle.prompts, Vehicle.instances, Vehicle.validators, Vehicle.className, Vehicle.savedPath, Vehicle.csvHeader, inputFunction);
+        editInstance(keyIndex, inputFunction, prompts, validators);
     }
 
     public static String editables() {

@@ -1,6 +1,11 @@
 package flows;
 
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import actions.Common.PersonalInfo;
 import actions.Common.Quit;
@@ -10,6 +15,9 @@ import behindTheScenes.Ticket;
 import behindTheScenes.Trip;
 import behindTheScenes.User;
 import behindTheScenes.Vehicle;
+import functions.stringAndStringToBooleanToString;
+import gui.components.Button;
+import gui.components.Frame;
 import gui.components.TextArea;
 
 public class UserFlow extends Flow {
@@ -17,22 +25,17 @@ public class UserFlow extends Flow {
     public ArrayList<UserAction> regActions;
     public ArrayList<UserAction> actions;
     public PersonalInfo personalInfo = new PersonalInfo();
-    public UserAction quit = new Quit();
 
-    UserFlow(ArrayList<UserAction> actions, boolean gui, String className) {
-        super();
+    UserFlow(String title, ArrayList<UserAction> actions, boolean gui, String className) {
+        super(title);
 
         initializeActions(actions, className);
         
         if (gui) {
-            startGuiFlow(regActions, new TextArea(), true);
-            return;
+            startGuiFlow(regActions, true);
         }
-        startCliFlow(regActions, true);
-
-        if (!user.success) {
-            cliOutput.print("\n\nInvalid credentials\n\n");
-            guiOutput.print("\n\nInvalid credentials\n\n");
+        else {
+            startCliFlow(regActions, true);
         }
 
         Trip.initiateClass();
@@ -41,28 +44,81 @@ public class UserFlow extends Flow {
     }
     
     public void initializeActions(ArrayList<UserAction> actions, String className) {
-
         this.regActions = RegActions.actions(className);
-        this.regActions.add(quit);
 
         this.actions = new ArrayList<>();
         this.actions.add(personalInfo);
         this.actions.addAll(actions);
-        this.actions.add(quit);
-    }
-    
-    public void startGuiFlow(ArrayList<UserAction> Actions, TextArea outputArea) {
-        startGuiFlow(Actions, outputArea, false);
     }
 
-    public void startGuiFlow(ArrayList<UserAction> Actions, TextArea outputArea, boolean reg) {
-        this.guiOutput = (str) -> outputArea.setText(str);
+
+    public void startGuiFlow(ArrayList<UserAction> Actions, boolean reg) {
+        //Initialize frame
+        Frame frame = new Frame(title);
+        frame.setLayout(new BorderLayout());
+        
+        //Button pannel
+        int num = Actions.size();
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(num, 1));
+
+        JScrollPane scrollPane;
+        if (!reg) {
+            //Text area and output function
+            TextArea outputArea = new TextArea();
+            guiOutput = (str) -> outputArea.setText(str);
+            scrollPane = new JScrollPane(outputArea);
+            frame.add(scrollPane, BorderLayout.CENTER);
+        }
+        else {
+            stringAndStringToBooleanToString temp = guiInput;
+            guiInput = (str, func) -> {
+                frame.setAlwaysOnTop(false);
+                String ans = temp.input(str, func);
+                frame.setAlwaysOnTop(true);
+                return ans;  
+            };
+        }
+
+        //For every action in actions
+        for (byte i = 0; i < num; i++) {
+            //Get the action
+            UserAction action = Actions.get(i);
+            Button newButton = new Button(action.prompt);
+
+            newButton.addActionListener(e -> {
+                user = action.startUserFlow(user, guiInput, guiOutput, true);
+                if (!reg) {
+                    return;
+                }
+                if (user == null) {
+                    return;
+                }
+                if (user.success) {
+                    frame.dispose();
+                }
+            });
+
+            buttonPanel.add(newButton);
+        }
+        if (reg) {
+            frame.add(buttonPanel);            
+        }
+        else {
+            frame.add(buttonPanel, BorderLayout.WEST);
+        }
+
+        frame.setAlwaysOnTop(reg);
+        frame.display();
 
     }
+
     public void startCliFlow(ArrayList<UserAction> Actions, boolean reg) {
+        Actions.add(new Quit());
         while (true) {
-
-            String choosedAction = chooseAction(Actions);
+            
+            cliOutput.print("\n\n::::" + title + "::::\n\n");
+            String choosedAction = chooseCliAction(Actions);
 
             for (byte i = 0; i < Actions.size(); i++) {
                 if (Actions.get(i).cliChar.equals(choosedAction)) {
@@ -71,10 +127,11 @@ public class UserFlow extends Flow {
             }
 
             if (!reg || user == null) {
+                cliInput.input("Press enter to continue", e -> true);
                 continue;
             }
             if (!user.success) {
-                System.out.println("\n\nInvalid credentials\n\n");
+                cliOutput.print("\n\nInvalid credentials\n\n");
                 continue;
             }
             return;
@@ -82,8 +139,12 @@ public class UserFlow extends Flow {
         }
     }
 
-    public void startCliFlow(ArrayList<UserAction> Actions) {
-        startCliFlow(Actions, false);
+    public void startCliFlow() {
+        startCliFlow(actions, false);
+    }
+
+    public void startGuiFlow() {
+        startGuiFlow(actions, false);
     }
     
 }

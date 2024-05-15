@@ -1,6 +1,7 @@
 package actions.Main;
 
 import actions.Action;
+import behindTheScenes.Passenger;
 import behindTheScenes.User;
 import flows.PassengerFlow;
 import functions.stringAndStringToBooleanToString;
@@ -12,9 +13,8 @@ public class StartPassenger extends Action {
     }
 
     public void startFlow(stringAndStringToBooleanToString inputFunction, stringToVoid outputFunction, boolean gui) {
-        this.inputFunc = inputFunction;
-        this.outputFunc = outputFunction;
-
+        super.startFlow(inputFunction, outputFunction, gui);
+        Passenger.initiateClass();
         new PassengerFlow(new User(), gui);
     }
 }

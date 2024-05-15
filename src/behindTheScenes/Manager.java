@@ -22,12 +22,11 @@ public class Manager extends User {
     }
     
     public void writeInstance() {
-        writeToFile(Manager.savedPath, toCsv());
+        writeInstance(Manager.savedPath);
     }
 
     public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction) {
-        editInstance(keyIndex, prompts, Manager.instances, Manager.validators, Manager.className, Manager.savedPath, Manager.csvHeader,
-                inputFunction);
+       editInstance(keyIndex, instances, validators, inputFunction);
     }
     
     public static String editables() {

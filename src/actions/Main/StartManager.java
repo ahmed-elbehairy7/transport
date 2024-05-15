@@ -1,6 +1,7 @@
 package actions.Main;
 
 import actions.Action;
+import behindTheScenes.Manager;
 import behindTheScenes.User;
 import flows.ManagerFlow;
 import functions.stringAndStringToBooleanToString;
@@ -12,9 +13,8 @@ public class StartManager extends Action {
     }
 
     public void startFlow(stringAndStringToBooleanToString inputFunction, stringToVoid outputFunction, boolean gui) {
-        this.inputFunc = inputFunction;
-        this.outputFunc = outputFunction;
-
+        super.startFlow(inputFunction, outputFunction, gui);
+        Manager.initiateClass();
         new ManagerFlow(new User(), gui);
     }
 }

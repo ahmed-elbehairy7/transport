@@ -1,6 +1,7 @@
 package actions.Main;
 
 import actions.Action;
+import behindTheScenes.Driver;
 import behindTheScenes.User;
 import flows.DriverFlow;
 import functions.stringAndStringToBooleanToString;
@@ -12,9 +13,8 @@ public class StartDriver extends Action {
     }
 
     public void startFlow(stringAndStringToBooleanToString inputFunction, stringToVoid outputFunction, boolean gui) {
-        this.inputFunc = inputFunction;
-        this.outputFunc = outputFunction;
-
+        super.startFlow(inputFunction, outputFunction, gui);
+        Driver.initiateClass();
         new DriverFlow(new User(), gui);
     }
 }

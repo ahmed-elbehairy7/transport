@@ -75,14 +75,9 @@ public class User extends Savable{
         return new User();
 
     }
-  
-    public void writeInstance(String savedPath) {
-        writeToFile(savedPath, toCsv());
-    }
 
-    public void editInstance(String keyIndex, ArrayList<?> instances, stringToBoolean[] validators, String className,
-            String savedPath, String csvHeader, stringAndStringToBooleanToString inputFunction) {
-        editInstance(keyIndex, prompts, instances, validators, className, savedPath, csvHeader, inputFunction);
+    public void editInstance(String keyIndex, ArrayList<?> instances, stringToBoolean[] validators, stringAndStringToBooleanToString inputFunction) {
+        editInstance(keyIndex, instances, validators, inputFunction);
     }
         
     public static Savable addInstance(ArrayList<?> instances, stringToBoolean[] validators, String className, String savedPath, stringAndStringToBooleanToString inputFunction) {

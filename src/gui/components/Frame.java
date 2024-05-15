@@ -8,9 +8,6 @@ public class Frame extends JFrame {
     public Frame(String title) {
         setTitle(title);
     }
-    public Frame() {
-        setTitle("Transport Company App");
-    }
 
     public void display() { 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

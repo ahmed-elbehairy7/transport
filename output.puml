@@ -1,0 +1,517 @@
+@startuml
+skinparam classAttributeIconSize 0
+class AddEmployee{
++ AddEmployee()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+AddEmployee --|> UserAction
+class AddTrip{
++ AddTrip()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+AddTrip --|> UserAction
+class TextArea{
++ TextArea()
+}
+TextArea --|> JTextArea
+class Manager{
++ {static} instances : ArrayList<User>
++ {static} className : String
++ {static} savedPath : String
++ {static} validators : stringToBoolean[]
++ Manager()
++ Manager(id : int, name : String, Email : String, username : String, password : String)
++ writeInstance() : void
++ editInstance(keyIndex : String, inputFunction : stringAndStringToBooleanToString) : void
++ {static} editables() : String
++ {static} addInstance(inputFunction : stringAndStringToBooleanToString) : Savable
++ {static} generateId() : int
++ {static} removeInstance(id : int) : void
++ {static} getById(id : String) : Savable
++ {static} saveInstances() : void
++ {static} getSaved() : void
++ {static} _listInstances() : String
++ {static} listInstances() : void
++ {static} initiateClass() : void
++ {static} newInstance(data : String[]) : void
+}
+Manager --|> User
+class Vehicle{
++ {static} instances : ArrayList<Savable>
++ {static} csvHeader : String
++ {static} savedPath : String
++ {static} className : String
++ {static} prompts : String[]
++ {static} validators : stringToBoolean[]
+- type : String
+- capacity : int
+- licensePlate : String
++ Vehicle()
++ Vehicle(type : String, capacity : int, licensePlate : String)
++ fromArray(data : String[]) : void
++ toCsv() : String
++ displayText() : String
++ toString() : String
++ writeInstance() : void
++ editInstance(keyIndex : String, inputFunction : stringAndStringToBooleanToString) : void
++ {static} editables() : String
++ {static} addInstance(inputFunction : stringAndStringToBooleanToString) : Savable
++ {static} generateId() : int
++ {static} removeInstance(id : int) : void
++ {static} getById(id : String) : Savable
++ {static} saveInstances() : void
++ {static} getSaved() : void
++ {static} _listInstances() : String
++ {static} listInstances() : void
++ {static} newInstance(data : String[]) : void
++ {static} initiateClass() : void
+}
+Vehicle --|> Savable
+class Ticket{
++ {static} instances : ArrayList<Savable>
++ {static} csvHeader : String
++ {static} savedPath : String
++ {static} className : String
++ {static} prompts : String[]
++ {static} validators : stringToBoolean[]
++ passengerId : int
++ tripId : int
++ Ticket()
++ Ticket(passengerId : int, tripId : int)
++ Ticket(id : int, passengerId : int, tripId : int)
++ fromArray(data : String[]) : void
++ toCsv() : String
++ displayText() : String
++ toString() : String
++ writeInstance() : void
++ editInstance(keyIndex : String, inputFunction : stringAndStringToBooleanToString) : void
++ {static} editables() : String
++ {static} addInstance(inputFunction : stringAndStringToBooleanToString) : Savable
++ {static} generateId() : int
++ {static} getById(id : String) : Savable
++ {static} saveInstances() : void
++ {static} getSaved() : void
++ {static} _listInstances() : String
++ {static} listInstances() : void
++ {static} _listTickets(passengerId : int) : String
++ {static} newInstance(data : String[]) : void
++ {static} removeInstance(id : int) : void
++ {static} initiateClass() : void
+}
+Ticket --|> Savable
+class BookTicket{
++ BookTicket()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+BookTicket --|> UserAction
+class Validations{
++ {static} validTripType(text : String) : boolean
++ {static} validCycle(text : String) : boolean
++ {static} validEmail(email : String) : boolean
++ {static} validPass(pass : String) : boolean
++ {static} validYesOrNo(text : String) : boolean
++ {static} validUsername(username : String, instances : ArrayList<User>) : boolean
++ {static} validName(text : String) : boolean
++ {static} validString(text : String) : boolean
++ {static} validInt(text : String) : boolean
+}
+class Label{
++ Label(text : String)
+}
+Label --|> JLabel
+class Driver{
++ {static} instances : ArrayList<User>
++ {static} className : String
++ {static} savedPath : String
++ {static} validators : stringToBoolean[]
++ Driver()
++ Driver(name : String, username : String, password : String, Email : String)
++ Driver(id : int, name : String, Email : String, username : String, password : String)
++ {static} _listDrivers() : String
++ writeInstance() : void
++ editInstance(keyIndex : String, inputFunction : stringAndStringToBooleanToString) : void
++ {static} editables() : String
++ {static} addInstance(inputFunction : stringAndStringToBooleanToString) : Savable
++ {static} generateId() : int
++ {static} removeInstance(id : int) : void
++ {static} getById(id : String) : Savable
++ {static} initiateClass() : void
++ {static} saveInstances() : void
++ {static} getSaved() : void
++ {static} _listInstances() : String
++ {static} listInstances() : void
++ {static} listDrivers() : void
++ {static} newInstance(data : String[]) : void
+}
+Driver --|> User
+class ListTrips{
++ ListTrips()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+ListTrips --|> UserAction
+class Quit{
++ Quit()
++ startFlow(input : stringAndStringToBooleanToString, output : stringToVoid, gui : boolean) : void
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+Quit --|> UserAction
+class MainActions{
++ {static} title : String
++ {static} startPassenger : StartPassenger
++ {static} startManager : StartManager
++ {static} startDriver : StartDriver
+MainActions()
++ {static} actions() : ArrayList<Action>
+}
+class StartManager{
++ StartManager()
++ startFlow(inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : void
+}
+StartManager --|> Action
+class Frame{
++ Frame(title : String)
++ display() : void
+}
+Frame --|> JFrame
+class DriverFlow{
++ DriverFlow(user : User, gui : boolean)
+}
+DriverFlow --|> UserFlow
+class InputData{
++ {static} gui(prompt : String, valid : stringToBoolean) : String
++ {static} cli(scanner : Scanner, prompt : String, valid : stringToBoolean) : String
++ {static} cli(scanner : Scanner, prompt : String) : String
+- {static} getData(inputFunction : voidToString, valid : stringToBoolean) : String
+}
+class EditTrip{
++ EditTrip()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+EditTrip --|> UserAction
+class RegActions{
++ {static} actions(className : String) : ArrayList<UserAction>
+}
+class P1{
++ P1()
+}
+P1 --|> Font
+class RemoveTicket{
++ RemoveTicket()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+RemoveTicket --|> UserAction
+class UserAction{
++ UserAction(prompt : String, cliChar : String)
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+UserAction --|> Action
+class AssignDriver{
++ AssignDriver()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+AssignDriver --|> UserAction
+class ListAssignedTrips{
++ ListAssignedTrips()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+ListAssignedTrips --|> UserAction
+class PassengerActions{
++ {static} listTrips : ListTrips
++ {static} bookTicket : BookTicket
++ {static} listTickets : ListTickets
++ {static} removeTicket : RemoveTicket
++ {static} actions() : ArrayList<UserAction>
+}
+class UserRegisteration{
++ usernameField : JTextField
++ passwordField : JTextField
++ className : String
++ {static} mustLabels : String[]
++ mustFields : JTextField[]
++ UserRegisteration(title : String)
+- generateField(label : String, field : JTextField) : void
++ generateUi(labels : String[], textFields : JTextField[], buttonsText : String[], actionListeners : ActionListener[]) : void
+}
+UserRegisteration --|> Frame
+class P2{
++ P2()
+}
+P2 --|> Font
+class Button{
++ Button(text : String)
+}
+Button --|> JButton
+class StartDriver{
++ StartDriver()
++ startFlow(inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : void
+}
+StartDriver --|> Action
+class Register{
++ className : String
++ Register(className : String)
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+Register --|> UserAction
+class Flow{
++ {static} scanner : Scanner
++ {static} cliInput : stringAndStringToBooleanToString
++ {static} guiInput : stringAndStringToBooleanToString
++ {static} cliOutput : stringToVoid
++ guiOutput : stringToVoid
++ actions : ArrayList<?>
++ title : String
++ Flow(title : String)
++ Flow(title : String, actions : ArrayList<?>)
++ startGuiFlow() : void
++ startCliFlow() : void
++ chooseCliAction(Actions : ArrayList<?>) : String
+}
+class ManagerFlow{
++ ManagerFlow(user : User, gui : boolean)
+}
+ManagerFlow --|> UserFlow
+class RemoveTrip{
++ RemoveTrip()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+RemoveTrip --|> UserAction
+class DriverActions{
++ {static} listAssignedTrips : ListAssignedTrips
++ {static} actions(usr : User) : ArrayList<UserAction>
+}
+class Dialog{
++ Dialog(parent : JFrame, title : String)
+}
+Dialog --|> JDialog
+class ListTrips{
++ ListTrips()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+ListTrips --|> UserAction
+class AddVehicle{
++ AddVehicle()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+AddVehicle --|> UserAction
+class Trip{
++ {static} instances : ArrayList<Savable>
++ {static} csvHeader : String
++ {static} savedPath : String
++ {static} className : String
++ {static} prompts : String[]
++ {static} validators : stringToBoolean[]
++ type : String
++ source : String
++ destination : String
++ cycle : String
++ stops : int
++ seats : int
++ price : int
++ driverId : int
++ Trip()
++ Trip(id : int, type : String, source : String, destination : String, stops : int, seats : int, price : int, driverId : int, cycle : String)
++ fromArray(data : String[]) : void
++ allDetails() : String
++ toCsv() : String
++ displayText() : String
++ toString() : String
++ writeInstance() : void
++ editInstance(keyIndex : String, inputFunction : stringAndStringToBooleanToString) : void
++ {static} editables() : String
++ {static} addInstance(inputFunction : stringAndStringToBooleanToString) : Savable
++ {static} generateId() : int
++ {static} removeInstance(id : int) : void
++ {static} getById(id : String) : Savable
++ {static} initiateClass() : void
++ {static} saveInstances() : void
++ {static} getSaved() : void
++ {static} _listInstances() : String
++ {static} listInstances() : void
++ {static} newInstance(data : String[]) : void
+}
+Trip --|> Savable
+class ListTickets{
++ ListTickets()
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+ListTickets --|> UserAction
+class Passenger{
++ {static} instances : ArrayList<User>
++ {static} savedPath : String
++ {static} className : String
++ {static} validators : stringToBoolean[]
++ Passenger()
++ Passenger(id : int, name : String, Email : String, username : String, password : String)
++ writeInstance() : void
++ editInstance(keyIndex : String, inputFunction : stringAndStringToBooleanToString) : void
++ {static} editables() : String
++ {static} addInstance(inputFunction : stringAndStringToBooleanToString) : Savable
++ {static} generateId() : int
++ {static} removeInstance(id : int) : void
++ {static} getById(id : String) : Savable
++ {static} saveInstances() : void
++ {static} getSaved() : void
++ {static} _listInstances() : String
++ {static} listInstances() : void
++ {static} initiateClass() : void
++ {static} newInstance(data : String[]) : void
+}
+Passenger --|> User
+class Savable{
++ {static} nTrip : String
++ {static} nTicket : String
++ {static} nVehicle : String
++ {static} nPassenger : String
++ {static} nManager : String
++ {static} nDriver : String
++ id : int
++ Savable()
++ toCsv(text : String) : String
++ toCsv() : String
++ displayText(text : String) : String
++ toString(displayText : String) : String
++ writeInstance(savedPath : String) : void
++ fromArray(data : String[]) : void
++ editInstance(keyIndex : String, prompts : String[], instances : ArrayList<?>, validators : stringToBoolean[], className : String, savedPath : String, csvHeader : String, inputFunction : stringAndStringToBooleanToString) : void
++ {static} editables(prompts : String[]) : String
++ {static} addInstance(prompts : String[], instances : ArrayList<?>, validators : stringToBoolean[], className : String, savedPath : String, csvHeader : String, inputFunction : stringAndStringToBooleanToString) : Savable
++ {static} generateId(instances : ArrayList<?>) : int
++ {static} removeInstance(id : int, instances : ArrayList<?>, savedPath : String, csvHeader : String) : void
++ {static} getById(stringId : String, instances : ArrayList<?>) : Savable
++ {static} initiateClass(savedPath : String, csvHeader : String, className : String, instances : ArrayList<?>) : void
++ {static} saveInstances(instances : ArrayList<?>, savedPath : String, csvHeader : String) : void
++ {static} getSaved(instances : ArrayList<?>, savedPath : String, className : String, csvHeader : String) : void
++ {static} sortInstances(instances : ArrayList<?>) : ArrayList<?>
++ {static} _listInstances(instances : ArrayList<?>) : String
++ {static} listInstances(instances : ArrayList<?>) : void
++ {static} writeToFile(fileName : String, data : String) : boolean
++ {static} _writeToFile(fileName : String, data : String, append : boolean) : boolean
+- {static} newInstance(data : String[], className : String) : void
+}
+class Main{
++ {static} main(args : String[]) : void
+}
+class StartPassenger{
++ StartPassenger()
++ startFlow(inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : void
+}
+StartPassenger --|> Action
+class ManagerActions{
++ {static} listTrips : ListTrips
++ {static} addTrip : AddTrip
++ {static} removeTrip : RemoveTrip
++ {static} editTrip : EditTrip
++ {static} assignDriver : AssignDriver
++ {static} addVehicle : AddVehicle
++ {static} addEmployee : AddEmployee
++ {static} actions() : ArrayList<UserAction>
+}
+class User{
++ {static} csvHeader : String
++ {static} prompts : String[]
++ name : String
++ username : String
++ password : String
++ Email : String
++ success : boolean
++ User()
++ User(id : int, name : String, Email : String, username : String, password : String)
++ User(name : String, username : String, password : String, Email : String, instances : ArrayList<User>)
++ fromArray(data : String[]) : void
++ toCsv() : String
++ displayText() : String
++ toString() : String
++ {static} login(username : String, password : String, instances : ArrayList<User>) : User
++ writeInstance(savedPath : String) : void
++ editInstance(keyIndex : String, instances : ArrayList<?>, validators : stringToBoolean[], className : String, savedPath : String, csvHeader : String, inputFunction : stringAndStringToBooleanToString) : void
++ {static} addInstance(instances : ArrayList<?>, validators : stringToBoolean[], className : String, savedPath : String, inputFunction : stringAndStringToBooleanToString) : Savable
++ {static} removeInstance(id : int, instances : ArrayList<User>, savedPath : String) : void
++ {static} editables() : String
++ {static} saveInstances(instances : ArrayList<User>, savedPath : String) : void
++ {static} getSaved(instances : ArrayList<User>, savedPath : String, className : String) : void
++ {static} initiateClass(usersFile : String, className : String, instances : ArrayList<?>) : void
+}
+User --|> Savable
+class Action{
++ inputFunc : stringAndStringToBooleanToString
++ outputFunc : stringToVoid
++ prompt : String
++ cliChar : String
++ Action(prompt : String, cliChar : String)
++ print(text : String) : void
++ input(prompt : String, validator : stringToBoolean) : String
++ toCliPrompt() : void
++ startFlow(inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : void
++ {static} newAction(gui : boolean, prompt : String, cliChar : String) : Action
+}
+class Login{
++ className : String
++ Login(className : String)
++ startUserFlow(user : User, inputFunction : stringAndStringToBooleanToString, outputFunction : stringToVoid, gui : boolean) : User
+}
+Login --|> UserAction
+class MainFlow{
++ MainFlow(gui : boolean)
+}
+MainFlow --|> Flow
+class UserFlow{
++ user : User
++ regActions : ArrayList<UserAction>
++ actions : ArrayList<UserAction>
++ personalInfo : PersonalInfo
+UserFlow(title : String, actions : ArrayList<UserAction>, gui : boolean, className : String)
++ initializeActions(actions : ArrayList<UserAction>, className : String) : void
++ startGuiFlow(Actions : ArrayList<UserAction>, reg : boolean) : void
++ startCliFlow(Actions : ArrayList<UserAction>, reg : boolean) : void
++ startCliFlow() : void
++ startGuiFlow() : void
+}
+UserFlow --|> Flow
+class PassengerFlow{
++ PassengerFlow(user : User, gui : boolean)
+}
+PassengerFlow --|> UserFlow
+class PersonalInfo{
++ PersonalInfo()
++ startUserFlow(user : User, input : stringAndStringToBooleanToString, output : stringToVoid, gui : boolean) : User
+}
+PersonalInfo --|> UserAction
+MainActions--"+ {static} startPassenger" StartPassenger
+MainActions--"+ {static} startManager" StartManager
+MainActions--"+ {static} startDriver" StartDriver
+PassengerActions--"+ {static} listTrips" ListTrips
+PassengerActions--"+ {static} bookTicket" BookTicket
+PassengerActions--"+ {static} listTickets" ListTickets
+PassengerActions--"+ {static} removeTicket" RemoveTicket
+Flow--"+ {static} cliInput" stringAndStringToBooleanToString
+Flow--"+ {static} guiInput" stringAndStringToBooleanToString
+Flow--"+ {static} cliOutput" stringToVoid
+Flow--"+ guiOutput" stringToVoid
+DriverActions--"+ {static} listAssignedTrips" ListAssignedTrips
+ManagerActions--"+ {static} listTrips" ListTrips
+ManagerActions--"+ {static} addTrip" AddTrip
+ManagerActions--"+ {static} removeTrip" RemoveTrip
+ManagerActions--"+ {static} editTrip" EditTrip
+ManagerActions--"+ {static} assignDriver" AssignDriver
+ManagerActions--"+ {static} addVehicle" AddVehicle
+ManagerActions--"+ {static} addEmployee" AddEmployee
+Action--"+ inputFunc" stringAndStringToBooleanToString
+Action--"+ outputFunc" stringToVoid
+UserFlow--"+ user" User
+UserFlow--"+ personalInfo" PersonalInfo
+interface stringAndStringToBooleanToString{
++ input(prompt : String, func : stringToBoolean) : String
+}
+interface stringToVoid{
++ print(text : String) : void
+}
+interface StringToBooleanToString{
++ get(func : stringToBoolean) : String
+}
+interface voidToString{
++ input() : String
+}
+interface stringToBoolean{
++ check(text : String) : boolean
+}
+@enduml

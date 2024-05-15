@@ -13,14 +13,6 @@ import functions.stringToBoolean;
 
 public class Savable {
 
-    public final static String nTrip = "Trip";
-    public final static String nTicket = "Ticket";
-    public final static String nVehicle = "Vehicle";
-    public final static String nPassenger = "Passenger";
-    public final static String nManager = "Manager";
-    public final static String nDriver = "Driver";
-
-    
     public int id;
 
     public Savable() {
@@ -50,8 +42,7 @@ public class Savable {
 
     }
 
-    public void editInstance(String keyIndex, String[] prompts, ArrayList<?> instances, stringToBoolean[] validators,
-        String className, String savedPath, String csvHeader, stringAndStringToBooleanToString inputFunction) {
+    public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction, String[] prompts, stringToBoolean[] validators) {
         byte length = (byte) prompts.length;
         String[] old = this.toCsv().split(",");
         String text = this.id + "";
@@ -208,22 +199,22 @@ public class Savable {
 
     private static void newInstance(String[] data, String className) {
         switch (className) {
-            case nTrip:
+            case Trip.className:
                 Trip.newInstance(data);
                 break;
-            case nTicket:
+            case Ticket.className:
                 Ticket.newInstance(data);
                 break;
-            case nVehicle:
+            case Vehicle.className:
                 Vehicle.newInstance(data);
                 break;
-            case nPassenger:
+            case Passenger.className:
                 Passenger.newInstance(data);
                 break;
-            case nManager:
+            case Manager.className:
                 Manager.newInstance(data);
                 break;
-            case nDriver:
+            case Driver.className:
                 Driver.newInstance(data);
                 break;
         

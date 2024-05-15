@@ -69,7 +69,7 @@ public class Ticket extends Savable {
     }
 
     public void editInstance(String keyIndex, stringAndStringToBooleanToString inputFunction) {
-        editInstance(keyIndex, prompts, instances, validators, className, savedPath, csvHeader, inputFunction);
+        editInstance(keyIndex, inputFunction, prompts, validators);
     }
 
     public static String editables() {

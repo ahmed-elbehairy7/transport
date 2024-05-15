@@ -18,8 +18,18 @@ public class RemoveTicket extends UserAction{
         print(Ticket._listTickets(user.id));
         String ans = input("\n\nTicket id:\n", e -> Validations.validInt(e));
         int id = Integer.parseInt(ans);
-
-        Ticket.removeInstance(id);
+        
+        for (byte i = 0; i < Ticket.instances.size(); i++) {
+            Ticket ticket = ((Ticket) Ticket.instances.get(i));
+            if (ticket.id != id) {
+                continue;
+            }
+            if (ticket.passengerId == id) {
+                Ticket.removeInstance(id);
+                break;
+            }
+            print("\n\nThe id you typed is invalid\n\n");
+        }
 
         return user;
     }

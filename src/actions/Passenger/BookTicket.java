@@ -14,10 +14,9 @@ public class BookTicket extends UserAction {
     }
 
     public User startUserFlow(User user, stringAndStringToBooleanToString inputFunction, stringToVoid outputFunction, boolean gui) {
-        this.inputFunc = inputFunction;
-        this.outputFunc = outputFunction;
+        super.startUserFlow(user, inputFunction, outputFunction, gui);
 
-        new ListTrips().startUserFlow(user, inputFunction, outputFunction, gui);
+        new ListTrips().startUserFlow(user, inputFunc, outputFunc, gui);
         print("Please enter the id of the trip: ");
         String id = input("Trip id: ", e -> Validations.validInt(e));
         Trip trip = (Trip) Trip.getById(id);
